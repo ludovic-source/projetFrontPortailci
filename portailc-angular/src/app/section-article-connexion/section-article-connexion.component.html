@@ -1,0 +1,20 @@
+
+<article id="bloc_principal" *ngIf="getIsAuth() === false">
+  <div id="bloc_form_connexion">
+    <h1>Bienvenue sur le portail de l'automobile</h1>
+    <fieldset>
+      <legend>Veuillez saisir vos informations pour vous connecter</legend>
+      <form (ngSubmit)="onSignInForm(f)" #f="ngForm">
+        <p>
+          <label for="username">Login (uid) : </label><br />
+          <input type="text" name="username" id="username" ngModel required>
+          <br />
+          <label for="password">Mot de passe : </label><br />
+          <input type="password" name="password" id="password" ngModel required>
+          <br /><br />
+        </p>
+        <button class="bouton_bleu" type="submit" [disabled]="f.invalid">Se connecter</button>
+      </form>
+    </fieldset>
+  </div>
+</article>

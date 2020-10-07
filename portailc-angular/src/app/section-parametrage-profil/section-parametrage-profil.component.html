@@ -1,0 +1,106 @@
+<div>
+  <table>
+    <caption>Liste des profils actuels et les droits associés</caption>
+    <tr>
+      <th>Profil</th>
+      <th>Droits</th>
+    </tr>
+    <ng-container *ngFor="let profil of allProfils">
+      <tr>
+        <td>{{ profil.nom }}</td>
+        <td>
+          <ng-container *ngFor="let droit of profil.droits">
+            {{ droit.nom }},
+          </ng-container>
+        </td>
+      </tr>
+    </ng-container>
+  </table>
+</div>
+
+<div id="bloc_modification_parametrage">
+  <div class="bloc_modification_parametrage_choix">
+    <p>Quel type de modification souhaitez-vous ?</p>
+    <input type="radio" value="create" name="type_modification"
+           (change)="setTypeModification('create')"/>Créer un nouveau profil<br />
+    <input type="radio" value="update" name="type_modification"
+           (change)="setTypeModification('update')"/>Modifier un profil existant<br />
+    <input type="radio" value="delete" name="type_modification"
+           (change)="setTypeModification('delete')"/>Supprimer un profil existant<br /><br />
+  </div>
+
+<!-- formulaire pour les créations de profil -->
+  <div class="bloc_modification_parametrage_form"
+        *ngIf="typeModification === 'create'">
+
+    <form (ngSubmit)="createProfil(f)" #f="ngForm">
+      <p>
+        <em>Complétez les champs obligatoires : </em><br /><br />
+        <label for="nom">nom court : </label>
+        <input type="text" id="nom" name="nom" ngModel required><br /><br />
+        <label for="description"> description : </label>
+        <input type="text" id="description" name="description" ngModel required><br /><br />
+        <em>Cochez les droits associés au profil : </em><br /><br />
+        <ng-container *ngFor="let droit of allDroits">
+          <input type="checkbox" name="{{ droit.nom }}" id="{{ droit.nom }}" ngModel/>
+          <label for="{{ droit.nom }}">{{ droit.nom }}</label><br />
+        </ng-container>
+        <br /><br />
+
+        <button class="bouton_bleu" type="submit" [disabled]="f.invalid">Créer profil</button>
+      </p>
+    </form>
+
+  </div>
+
+<!-- formulaire pour les modifications de profil -->
+  <div class="bloc_modification_parametrage_form"
+       *ngIf="typeModification === 'update'">
+    <form (ngSubmit)="updateProfil(f)" #f="ngForm">
+      <p>
+        <em>Sélectionnez le profil à modifier : </em>
+        <select id="profil_update" name="profil"
+                (ngModelChange)="setProfil($event)" ngModel required>
+          <ng-container *ngFor="let profil of allProfils">
+            <option [ngValue]="profil">{{ profil.nom}}</option>
+          </ng-container>
+        </select>
+      </p>
+      <p *ngIf="indicateurProfil === true">
+        <label for="nom_update">nom court : </label>
+        <input type="text" id="nom_update" name="nom" ngModel="{{ profil.nom }}" required><br /><br />
+        <label for="description_update"> description : </label>
+        <input type="text" id="description_update" name="description"
+               ngModel="{{ profil.description }}" required><br /><br />
+        <em>Cochez les droits associés au profil : </em><br />
+        <ng-container *ngFor="let droit of allDroits">
+          <input type="checkbox" name="{{ droit.nom }}" id="update_{{ droit.nom }}" ngModel/>
+          <label for="update_{{ droit.nom }}">{{ droit.nom }}</label><br />
+        </ng-container>
+        <br />
+      </p>
+
+      <button class="bouton_bleu" type="submit" [disabled]="f.invalid">Modifier profil</button>
+    </form>
+
+  </div>
+
+<!-- formulaire pour les suppressions de profil -->
+  <div class="bloc_modification_parametrage_form"
+       *ngIf="typeModification === 'delete'">
+    <form (ngSubmit)="deleteProfil(f)" #f="ngForm">
+      <p>
+        <em>Sélectionnez le profil à supprimer : </em>
+        <select id="profil_delete" name="profil" ngModel required>
+          <ng-container *ngFor="let profil of allProfils">
+            <option [ngValue]="profil">{{ profil.nom}}</option>
+          </ng-container>
+        </select>
+      </p>
+      <button class="bouton_bleu" type="submit" [disabled]="f.invalid">Supprimer profil</button>
+    </form>
+  </div>
+
+</div>
+
+

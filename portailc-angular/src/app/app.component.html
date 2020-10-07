@@ -1,0 +1,106 @@
+<header>
+  <div id="bloc_contact">
+    <div id="contact_mail">
+      <p>Contact : MLIST PARIS............</p>
+    </div>
+  </div>
+
+  <div id="bloc_titre">
+    <h1>Portail de l'automobile</h1>
+  </div>
+
+  <div id="bloc_utilisateur">
+    <div id="nom_utilisateur">
+      <p *ngIf="getIsAuth() === true">{{ getUsername() }}</p>
+    </div>
+    <!-- lorsque l'utilisateur est déjà connecté, le lien ne pointe plus sur la page Connexion
+      mais juste une info bulle pour indiquer le prenom et le nom de l'utilisateur connecté ou déconnexion -->
+    <p class="connexion" *ngIf="getIsAuth() === true">
+      <button class="button_menu" (click)="onSignOut()">
+        <img src="/assets/images/icons8_user_30px.png" alt="déconnexion" title="se déconnecter">
+      </button>
+    </p>
+    <p class="connexion" *ngIf="getIsAuth() === false">
+      <a routerLink="">
+        <img src="/assets/images/icons8_user_30px.png" alt="déconnexion" title="se connecter">
+      </a>
+    </p>
+    <!-- pour les utilisateurs de type Admin et de type 2 lorsqu'ils sont déjà connectés.
+    Lorsque l'utilisateur n'est pas connecté, on n'affiche pas l'icône -->
+    <p id="edition" *ngIf="getIsAuth() === true
+                           && ( controleDroitUser('Modification') === true
+                                || controleDroitUser('Création') === true
+                                || controleDroitUser('Suppression') === true)">
+
+      <button class="button_menu"
+              *ngIf="indicateursEdition.isModeEdition != true"
+              (click)="activerModeEdition()">
+
+        <img src="/assets/images/icons8_pencil_30px.png"
+             alt="activer le mode édition de liens"
+             title="activer le mode édition de liens">
+      </button>
+      <button class="button_menu"
+              *ngIf="indicateursEdition.isModeEdition === true"
+              (click)="desactiverModeEdition()">
+
+          <img src="/assets/images/icons8_no_edit_30px.png"
+               alt="désactiver le mode édition de liens"
+               title="désactiver le mode édition de liens">
+      </button>
+    </p>
+    <p id="parametrage" *ngIf="getIsAuth() === true && controleDroitUser('Administration') === true">
+      <a *ngIf="getIsModeParametrage() === false"
+         routerLink="parametrage" (click)="activerModeParametrage()">
+        <img src="/assets/images/icons8_admin_settings_male_30px.png" alt="mode paramétrage" title="activer mode paramétrage">
+      </a>
+      <a *ngIf="getIsModeParametrage() === true"
+         routerLink="parametrage" (click)="desactiverModeParametrage()">
+        <img src="/assets/images/icons8_admin_settings_male_stop_30px.png" alt="mode paramétrage" title="désactiver mode paramétrage">
+      </a>
+    </p>
+  </div>
+</header>
+
+<nav *ngIf="getIsAuth() === true && getIsModeParametrage() === true">
+</nav>
+
+<nav *ngIf="getIsAuth() === true && getIsModeParametrage() === false">
+  <div class="menu" *ngFor="let theme of themes"
+       routerLinkActive="active">
+    <a class="menu_options" routerLink="theme/{{ theme.id }}">
+      <div *ngIf="getImage(theme.id) != null && getImage(theme.id) != ''">
+        <!-- <img src="assets/images/{{ getImage(theme.id) }}"> -->
+        <img src="{{ getImage(theme.id) }}">
+      </div>
+      <h3 title="{{ theme.description }}">{{ theme.nom }}</h3>
+    </a>
+  </div>
+  <div class="menu" *ngIf="indicateursEdition.isModeEdition === true">
+    <button routerLink="edition"
+            (click)="editerThematique(1)"
+            class="bouton_edition">
+      <img src="/assets/images/T16px.png"
+           alt="édition thématique niveau thème"
+           title="ajouter, modifier, supprimer un thème ">
+    </button>
+    <button routerLink="edition"
+            (click)="editerLien(1)"
+            class="bouton_edition">
+      <img src="/assets/images/L16px.png"
+           alt="édition lien niveau thème"
+           title="ajouter, modifier, supprimer un lien de niveau thème">
+    </button>
+  </div>
+</nav>
+
+<section>
+  <router-outlet></router-outlet>
+</section>
+
+
+
+
+
+
+

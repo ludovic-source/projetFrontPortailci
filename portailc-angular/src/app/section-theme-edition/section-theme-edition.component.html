@@ -1,0 +1,16 @@
+<article id="bloc_module_edition" *ngIf="indicateursEdition.isModeEdition === true">
+
+  <div id="bloc_module_edition_titre">
+    <h1 *ngIf="indicateursEdition.typeObjet==='lien'">Module édition Lien</h1>
+    <h1 *ngIf="indicateursEdition.typeObjet==='thematique'">Module édition Thematique</h1>
+  </div>
+
+  <app-section-theme-edition-lien
+    *ngIf="indicateursEdition.typeObjet==='lien'">
+  </app-section-theme-edition-lien>
+
+  <app-section-theme-edition-thematique
+      *ngIf="indicateursEdition.typeObjet==='thematique'">
+  </app-section-theme-edition-thematique>
+
+</article>

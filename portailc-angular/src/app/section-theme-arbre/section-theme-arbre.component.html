@@ -1,0 +1,177 @@
+<div id="section_theme">
+
+  <article id="bloc_theme">
+    <!--       style="background-image: url('{{ getImage() }}');background-repeat: no-repeat;"> -->
+
+    <div class="bloc_sous_theme">
+
+      <button *ngIf="indicateursEdition.isModeEdition === true"
+              (click)="editerThematique(2)"
+              class="bouton_edition">
+        <img src="/assets/images/T24px.png"
+             alt="ajouter, modifier, supprimer un sous-thème"
+             title="ajouter, modifier, supprimer un sous-thème">
+      </button>
+      <div class="bloc_lien" *ngFor="let lienNiveau1 of liensNiveau1">
+        <ng-container *ngIf="indicateursEdition.isModeEdition != true">
+          <p *ngIf="lienNiveau1.thematique.id == getIdTheme()
+                    && lienNiveau1.statut == 'publié'">
+            <a *ngIf="lienNiveau1.mode_affichage == false"
+               href="{{ lienNiveau1.url }}"
+               title="{{ lienNiveau1.description }}"
+               target="_blank"> {{ lienNiveau1.nom }}</a>
+            <a *ngIf="lienNiveau1.mode_affichage == true"
+               title="{{ lienNiveau1.description }}"
+               href="{{ lienNiveau1.url }}"> {{ lienNiveau1.nom }}</a>
+          </p>
+        </ng-container>
+        <ng-container *ngIf="indicateursEdition.isModeEdition === true">
+          <p *ngIf="lienNiveau1.thematique.id == getIdTheme()">
+            <button (click)="editerLien(2)"
+                    class="bouton_edition">
+              <img src="/assets/images/L16px.png"
+                   alt="modifier le lien"
+                   title="modifier le lien">
+            </button>
+            <a *ngIf="lienNiveau1.mode_affichage == false"
+               href="{{ lienNiveau1.url }}"
+               title="{{ lienNiveau1.description }}"
+               target="_blank"> {{ lienNiveau1.nom }}</a>
+            <a *ngIf="lienNiveau1.mode_affichage == true"
+               title="{{ lienNiveau1.description }}"
+               href="{{ lienNiveau1.url }}"> {{ lienNiveau1.nom }}</a>
+            <span *ngIf="lienNiveau1.statut === 'publié restreint'">*</span>
+          </p>
+        </ng-container>
+      </div>
+    </div>
+
+    <div class="bloc_sous_theme" *ngFor="let themeNiveau2 of themesNiveau2">
+      <div class="bloc_titre">
+        <button *ngIf="indicateursEdition.isModeEdition === true"
+                (click)="editerThematique(3)"
+                class="bouton_edition">
+          <img src="/assets/images/T16px.png"
+               alt="modifier un sous-thème, ou ajouter et supprimer un sous sous-thème"
+               title="modifier un sous-thème, ou ajouter et supprimer un sous sous-thème">
+        </button>
+        <button *ngIf="indicateursEdition.isModeEdition === true"
+                (click)="editerLien(3)"
+                class="bouton_edition">
+          <img src="/assets/images/L16px.png"
+               alt="ajouter un lien au sous-thème"
+               title="ajouter un lien au sous-thème">
+        </button>
+        <a class="button_theme"
+                *ngIf="themeNiveau2.niveau == 2"
+                title="{{ themeNiveau2.description }}"
+                (click)="getThemesNiveau3EtLiens(themeNiveau2.id)">
+          <h4> {{ themeNiveau2.nom }} </h4>
+        </a>
+
+      </div>
+      <div class="bloc_lien" *ngFor="let lienNiveau2 of liensNiveau2">
+        <ng-container *ngIf="indicateursEdition.isModeEdition != true">
+          <p *ngIf="lienNiveau2.thematique.id == themeNiveau2.id
+                    && lienNiveau2.statut == 'publié'">
+            <a *ngIf="lienNiveau2.mode_affichage == false"
+               href="{{ lienNiveau2.url }}"
+               title="{{ lienNiveau2.description }}"
+               target="_blank"> {{ lienNiveau2.nom }}</a>
+            <a *ngIf="lienNiveau2.mode_affichage == true"
+               title="{{ lienNiveau2.description }}"
+               href="{{ lienNiveau2.url }}"> {{ lienNiveau2.nom }}</a>
+          </p>
+        </ng-container>
+        <ng-container *ngIf="indicateursEdition.isModeEdition === true">
+          <p *ngIf="lienNiveau2.thematique.id == themeNiveau2.id">
+            <button (click)="editerLien(4)"
+                    class="bouton_edition">
+              <img src="/assets/images/L16px.png"
+                   alt="modifier le lien"
+                   title="modifier le lien">
+            </button>
+            <a *ngIf="lienNiveau2.mode_affichage == false"
+               href="{{ lienNiveau2.url }}"
+               title="{{ lienNiveau2.description }}"
+               target="_blank"> {{ lienNiveau2.nom }}</a>
+            <a *ngIf="lienNiveau2.mode_affichage == true"
+               title="{{ lienNiveau2.description }}"
+               href="{{ lienNiveau2.url }}"> {{ lienNiveau2.nom }}</a>
+            <span *ngIf="lienNiveau2.statut === 'publié restreint'">*</span>
+          </p>
+        </ng-container>
+      </div>
+
+      <div class="bloc_sous_sous_theme" *ngFor="let themeNiveau3 of themesNiveau3">
+        <div class="bloc_lien">
+          <div class="bloc_titre">
+            <button *ngIf="themeNiveau3.niveau == 3 && themeNiveau2.id == themeNiveau3.idParent
+                        && indicateursEdition.isModeEdition === true"
+                    (click)="editerThematique(4)"
+                    class="bouton_edition">
+              <img src="/assets/images/T16px.png"
+                   alt="modifier le sous sous-thème"
+                   title="modifier le sous sous-thème">
+            </button>
+            <button *ngIf="themeNiveau3.niveau == 3 && themeNiveau2.id == themeNiveau3.idParent
+                    && indicateursEdition.isModeEdition === true"
+                    (click)="editerLien(5)"
+                    class="bouton_edition">
+              <img src="/assets/images/L16px.png"
+                   alt="ajouter un lien au sous sous-thème"
+                   title="ajouter un lien au sous sous-thème">
+            </button>
+            <a class="button_theme"
+                    *ngIf="themeNiveau3.niveau == 3 && themeNiveau2.id == themeNiveau3.idParent"
+                    title="{{ themeNiveau2.description }}"
+                    (click)="getLiens(themeNiveau3.id)">
+              <h4> {{ themeNiveau3.nom }}</h4>
+            </a>
+          </div>
+          <div *ngFor="let lien of liens">
+            <ng-container *ngIf="indicateursEdition.isModeEdition != true">
+              <p *ngIf="lien.thematique.id == themeNiveau3.id
+                        && themeNiveau2.id == themeNiveau3.idParent
+                        && lien.statut == 'publié'">
+                <a *ngIf="lien.mode_affichage == false"
+                   href="{{ lien.url }}"
+                   title="{{ lien.description }}"
+                   target="_blank"> {{ lien.nom }}</a>
+                <a *ngIf="lien.mode_affichage == true"
+                   title="{{ lien.description }}"
+                   href="{{ lien.url }}"> {{ lien.nom }}</a>
+              </p>
+            </ng-container>
+            <ng-container *ngIf="indicateursEdition.isModeEdition === true">
+              <p *ngIf="lien.thematique.id == themeNiveau3.id
+                        && themeNiveau2.id == themeNiveau3.idParent">
+                <button (click)="editerLien(6)"
+                        class="bouton_edition">
+                  <img src="/assets/images/L16px.png"
+                       alt="modifier le lien"
+                       title="modifier le lien">
+                </button>
+                <a *ngIf="lien.mode_affichage == false"
+                   href="{{ lien.url }}"
+                   title="{{ lien.description }}"
+                   target="_blank"> {{ lien.nom }}</a>
+                <a *ngIf="lien.mode_affichage == true"
+                   title="{{ lien.description }}"
+                   href="{{ lien.url }}"> {{ lien.nom }}</a>
+                <span *ngIf="lien.statut === 'publié restreint'">*</span>
+              </p>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </article>
+
+  <app-section-theme-edition *ngIf="indicateursEdition.isModeEdition === true
+                                    && indicateursEdition.isEdition === true">
+  </app-section-theme-edition>
+
+
+</div>

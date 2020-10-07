@@ -1,0 +1,24 @@
+<article id="bloc_module_parametrage">
+
+  <div id="bloc_menu_parametrage">
+    <div class="menu_parametrage">
+      <h1>Module de paramétrage</h1>
+    </div>
+    <div class="menu_parametrage">
+      <h4>Veuillez choisir l'élément à modifier</h4>
+    </div>
+    <input type="radio" value="utilisateur" name="type_parametrage"
+           (change)="setTypeParametrage('utilisateur')"/>Ajouter, modifier, ou supprimer un utilisateur<br />
+    <input type="radio" value="profil" name="type_parametrage"
+           (change)="setTypeParametrage('profil')"/>Ajouter, modifier, ou supprimer un profil<br /><br />
+  </div>
+
+  <app-section-parametrage-profil
+    *ngIf="typeParametrage === 'profil'">
+  </app-section-parametrage-profil>
+
+  <app-section-parametrage-utilisateur
+    *ngIf="typeParametrage === 'utilisateur'">
+  </app-section-parametrage-utilisateur>
+
+</article>

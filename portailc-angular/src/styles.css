@@ -1,0 +1,295 @@
+body
+{
+	font-family: "Times New Roman";
+}
+
+a
+{
+	color: black;
+	text-decoration: none;
+}
+
+a:active
+{
+	color: black;
+}
+
+a:focus
+{
+	border-bottom: 2px solid black;
+}
+
+a:visited
+{
+	color: black;
+}
+
+header
+{
+	/*border : 0.5px solid black; */
+	height: 90px;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+#bloc_contact
+{
+	/*border : 0.5px solid black;*/
+	display: flex;
+	justify-content: space-between;
+	flex-direction: row;
+	flex : 1;
+}
+
+#bloc_titre
+{
+	/*border : 0.5px solid black;*/
+	flex : 2;
+	text-align: center;
+	align-self: flex-end;
+}
+
+#bloc_utilisateur
+{
+	/*border : 0.5px solid black;*/
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	flex : 1;
+}
+
+nav
+{
+	border-bottom: 1px solid black;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	align-items: center;
+	height: 60px;
+}
+
+.menu_options
+{
+  display: flex;
+  flex-direction: row;
+}
+
+.button_menu
+{
+  background-color: rgba(255, 255, 255, 0);
+  border: 0px;
+}
+
+/*.menu_actif
+{
+	border-bottom: 3px solid black;
+}*/
+
+#section_theme
+{
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+#bloc_theme
+{
+	/*border : 0.5px solid black;*/
+	min-height : 500px;
+	margin-left: 5px;
+	margin-right: 5px;
+	background-color: rgba(200,200,200,0.3);
+	display: flex;
+	justify-content: flex-start;
+	flex-wrap: wrap;
+}
+
+#bloc_theme p
+{
+	height: 12px;
+}
+
+.bloc_sous_theme
+{
+	/*border : 0.5px solid black;*/
+	margin: 10px 20px 20px 20px;
+	display: flex;
+	justify-content: flex-start;
+	align-content: flex-start;
+	flex-direction: column;
+	flex-wrap: wrap;
+}
+
+.bloc_sous_theme h4
+{
+	text-decoration: underline;
+	height: 16px
+}
+
+.bloc_sous_sous_theme
+{
+	/*border : 0.5px solid black;*/
+	margin: 0px 5px 5px 0px;
+	display: flex;
+}
+
+.bloc_sous_sous_theme h4
+{
+	height: 12px;
+}
+
+.bloc_titre
+{
+  /*border : 0.5px solid black;*/
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  flex-wrap: nowrap;
+}
+
+.button_theme
+{
+  background-color: rgba(240,96,204,0);
+  border: 0px;
+
+}
+
+.bloc_lien
+{
+	/*border : 0.5px solid black;*/
+	color : grey;
+}
+
+.bloc_lien h4
+{
+	text-decoration: none;
+	color: black;
+}
+
+#bloc_form_connexion h1
+{
+	text-align: center;
+	font-style: italic;
+}
+
+#bloc_module_edition
+{
+  /*border: 0.5px double grey;*/
+  min-width: 400px;
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
+#bloc_module_edition_titre
+{
+	padding-left: 20px;
+}
+
+.bloc_module_edition_saisie
+{
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
+#bloc_module_parametrage
+{
+  display: flex;
+  justify-content: space-around;
+}
+
+#bloc_menu_parametrage
+{
+  /*text-align: center;*/
+}
+
+.menu_parametrage
+{
+
+}
+
+.bouton_gris_clair
+{
+	width: 300px;
+	margin-left: 20px;
+	margin-top: 20px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	background-color: #CCCCCC;
+	border: 1px black solid;
+	border-radius: 10px;
+	box-shadow: 1px 1px 0px grey;
+	text-align: center;
+}
+
+.bouton_gris_fonce
+{
+	width: 300px;
+	margin-left: 20px;
+	margin-top: 20px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	background-color: #AAAAAA;
+	border: 1px black solid;
+	border-radius: 10px;
+	box-shadow: 1px 1px 0px grey;
+	text-align: center;
+	color : white;
+}
+
+.bouton_blanc
+{
+	width: 300px;
+	margin-left: 20px;
+	margin-top: 20px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	background-color: #FFFFFF;
+	border: 1px black solid;
+	border-radius: 10px;
+	box-shadow: 1px 1px 0px grey;
+	text-align: center;
+}
+
+.bouton_vert
+{
+  background-color: #20BF55;
+  border-width: 0px;
+  border-radius: 5px;
+  color: white;
+  font-weight: bold;
+}
+
+.bouton_rouge
+{
+  background-color: #FF1654;
+  border-width: 0px;
+  border-radius: 5px;
+  color: white;
+  font-weight: bold;
+}
+
+.bouton_bleu
+{
+  background-color: #48BFE3;
+  border-width: 0px;
+  border-radius: 5px;
+}
+
+.bouton_edition
+{
+  heigth: 20px;
+  width: 20px;
+  border: 0px black solid;
+  margin: 0px 5px 5px 0px;
+}
+
+td, th
+{
+	border : 1px solid black;
+}
+
+.active {
+  border-bottom: 3px solid black;
+}
+
