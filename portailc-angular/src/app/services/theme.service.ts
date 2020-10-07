@@ -92,11 +92,13 @@ export class ThemeService {
   getImageTheme() {
       for (let theme of this.themes) {
           console.log('recherche image thème :' + theme.id);
-          this.getData(theme.id)
-              .subscribe(
-                  imgData => window.localStorage.setItem(theme.id, imgData),
-                  err => console.log('Erreur ! : ' + err)
-          );
+          if (theme.imagePath != "") {
+            this.getData(theme.id)
+                .subscribe(
+                    imgData => window.localStorage.setItem(theme.id, imgData),
+                    err => console.log('Erreur ! : ' + err)
+            );
+          }
       }
   }
 

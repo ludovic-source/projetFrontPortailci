@@ -5,14 +5,14 @@ export class EditionService {
 
     indicateursEditionSubject = new Subject<any>();
     private indicateursEdition = {
-                        lieuEdition: 0,
-                        typeObjet: '',
-                        isModeEdition: false,
+                        lieuEdition: 0,     // permet d'indiquer de quel niveau provient la demande d'édition
+                        typeObjet: '',      // permet de savoir si c'est un lien ou une thématique
+                        isModeEdition: false,   // permet de gérer l'activation et la désactivation du mode édition
                         isEdition: false,
-                        typeModification: '',
-                        niveauThematique: 0,
-                        indicateurUpdate: false,
-                        indicateurModifierThemeParent: false
+                        typeModification: '',   // nature de la modif : création, modification, suppression
+                        niveauThematique: 0,    // 3 niveaux possible : 1, 2 et 3
+                        indicateurUpdate: false,    // permet d'indiquer si l'utilisateur veut faire une modification
+                        indicateurModifierThemeParent: false  // permet d'indiquer si l'utilisateur souhaite une modification du rattachement
     };
 
     emitIndicateursEditionSubject() {

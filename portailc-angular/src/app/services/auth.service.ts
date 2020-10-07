@@ -71,10 +71,12 @@ export class AuthService {
              .subscribe(isValid => {
                console.log("retour de l'appel = " + isValid)
                if (isValid) {
+                   /* 7_10_2020 - PAS NECESSAIRE - à retirer
                    sessionStorage.setItem(
                      'token',
                      btoa(username + ':' + password)
                    );
+                   */
                    this.user.isAuth = true;
                    this.user.username = username;
                    this.getProfil(username);

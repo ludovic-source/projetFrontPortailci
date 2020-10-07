@@ -76,7 +76,7 @@ export class SectionThemeArbreComponent implements OnInit {
   }
 
   ngOnChanges(): void {
-      this.constructionArbre().then(() => console.log('résolution promise OK'));
+      this.constructionArbre();
   }
 
   getIsAuth() {
@@ -87,16 +87,16 @@ export class SectionThemeArbreComponent implements OnInit {
       return this.idTheme;
   }
 
-  async constructionArbre() {
+  constructionArbre() {
       console.log('section-theme / idTheme : ' + this.idTheme);
-      this.themesNiveau2 = await this.recuperationThematiquesNiveau2();
+      this.recuperationThematiquesNiveau2();
       // récupération des liens directements rattachés au thème niveau 1
-      this.liensNiveau1 = await this.recuperationLiensNiveau1();
+      this.recuperationLiensNiveau1();
   }
 
   recuperationThematiquesNiveau2() {
       console.log('section-theme / idTheme : ' + this.idTheme);
-      return Promise.resolve(this.themeService.getThemesNiveau2(this.idTheme));
+      this.themeService.getThemesNiveau2(this.idTheme);
   }
 
   getThemesNiveau3EtLiens(idThemeNiveau2: number) {
@@ -107,11 +107,11 @@ export class SectionThemeArbreComponent implements OnInit {
   }
 
   recuperationLiensNiveau1() {
-      return Promise.resolve(this.lienService.getLiensNiveau1(this.idTheme));
+      this.lienService.getLiensNiveau1(this.idTheme);
   }
 
   getLiensNiveau2() {
-      return Promise.resolve(this.lienService.getLiensNiveau2(this.idTheme));
+      return this.lienService.getLiensNiveau2(this.idTheme);
   }
 
   getLiens(idTheme: number) {
