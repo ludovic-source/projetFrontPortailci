@@ -71,7 +71,7 @@
     <a class="menu_options" routerLink="theme/{{ theme.id }}">
       <div *ngIf="getImage(theme.id) != null && getImage(theme.id) != ''">
         <!-- <img src="assets/images/{{ getImage(theme.id) }}"> -->
-        <img src="{{ getImage(theme.id) }}">
+        <img class="picto" src="{{ getImage(theme.id) }}">
       </div>
       <h3 title="{{ theme.description }}">{{ theme.nom }}</h3>
     </a>
