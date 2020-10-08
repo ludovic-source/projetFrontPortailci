@@ -308,6 +308,30 @@ export class ThemeService {
                         this.themes.splice(indexRecherche, 1);
                         this.emitThemesSubject();
                     }
+                    if (thematique.niveau == 2) {
+                      var index = 0;
+                      var indexRecherche: number;
+                      for (let theme of this.themes) {
+                          if (theme.id == idThematique) {
+                              indexRecherche = index;
+                          }
+                          index = index + 1;
+                      }
+                      this.themesNiveau2.splice(indexRecherche, 1);
+                      this.emitThemesNiveau2Subject();
+                    }
+                    if (thematique.niveau == 3) {
+                      var index = 0;
+                      var indexRecherche: number;
+                      for (let theme of this.themes) {
+                          if (theme.id == idThematique) {
+                              indexRecherche = index;
+                          }
+                          index = index + 1;
+                      }
+                      this.themesNiveau3.splice(indexRecherche, 1);
+                      this.emitThemesNiveau3Subject();
+                    }
                },
                (error) => {
                     alert('thématique non supprimée');
