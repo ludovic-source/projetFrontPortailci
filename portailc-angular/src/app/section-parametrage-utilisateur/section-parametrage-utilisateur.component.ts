@@ -1,5 +1,6 @@
 import { Component, OnInit, OnChanges } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
+import { Observable } from 'rxjs';
 import { Subscription } from 'rxjs/Subscription';
 import { Profil } from '../models/Profil';
 import { Utilisateur } from '../models/Utilisateur';
@@ -13,112 +14,132 @@ import { UtilisateurService } from '../services/utilisateur.service';
 })
 export class SectionParametrageUtilisateurComponent implements OnInit {
 
+  collaborateur$: Observable<Utilisateur[]>;
+
+  searchInRefoForm: FormGroup;
+  /////////////////////////////
+
   typeModification = '';
 
-  allProfils : any[];
-  allProfilsSubscription : Subscription;
+  allProfils: any[];
+  allProfilsSubscription: Subscription;
 
-  allUtilisateurs : any[];
-  allUtilisateursSubscription : Subscription;
+  allUtilisateurs: any[];
+  allUtilisateursSubscription: Subscription;
 
   utilisateur: Utilisateur;
   indicateurUtilisateur = false;
+
   collaborateur: any;
   indicateurCollaborateur = false;
 
   allCollaborateurs: any[];
 
-  constructor(private profilService: ProfilService, private utilisateurService: UtilisateurService) { }
+  constructor(private profilService: ProfilService, private utilisateurService: UtilisateurService, private formBuilder: FormBuilder) { }
 
   ngOnInit(): void {
-      this.allProfilsSubscription = this.profilService.allProfilsSubject.subscribe(
-                        (allProfils: any) => {
-                                              this.allProfils = allProfils;
-                                                    });
-      this.profilService.emitAllProfilsSubject();
-      this.profilService.getAllProfils();
-      this.profilService.emitAllProfilsSubject();
-      this.allUtilisateursSubscription = this.utilisateurService.allUtilisateursSubject.subscribe(
-                        (allUtilisateurs: any) => {
-                                              this.allUtilisateurs = allUtilisateurs;
-                                                    });
-      this.utilisateurService.emitAllUtilisateursSubject();
-      this.utilisateurService.getAllUtilisateurs();
-      this.utilisateurService.emitAllUtilisateursSubject();
-      this.allCollaborateurs = this.utilisateurService.getAllCollaborateurs();
+    // On lie l'Observable à l'Observable d'utilisateurService
+    this.collaborateur$ = this.utilisateurService.collaborateur$;
+    // On initialise le formulaire de recherche d'utilisateur dans le REFO
+    this.searchInRefoForm = this.formBuilder.group({
+      uid: ['', Validators.required]
+    });
+
+    /////////////
+    this.allProfilsSubscription = this.profilService.allProfilsSubject.subscribe(
+      (allProfils: any) => {
+        this.allProfils = allProfils;
+      });
+    this.profilService.emitAllProfilsSubject();
+    this.profilService.getAllProfils();
+    this.profilService.emitAllProfilsSubject();
+    this.allUtilisateursSubscription = this.utilisateurService.allUtilisateursSubject.subscribe(
+      (allUtilisateurs: any) => {
+        this.allUtilisateurs = allUtilisateurs;
+      });
+    this.utilisateurService.emitAllUtilisateursSubject();
+    this.utilisateurService.getAllUtilisateurs();
+    this.utilisateurService.emitAllUtilisateursSubject();
+    this.allCollaborateurs = this.utilisateurService.getAllCollaborateurs();
   }
 
   setTypeModification(typeModification: string) {
-      this.typeModification = typeModification;
+    this.typeModification = typeModification;
+  }
+
+  searchCollaborateurFromRefo() {
+    const uid = this.searchInRefoForm.controls.uid.value;
+    console.log(uid);
+    console.log(this.utilisateurService.getCollaborateurRefoByUid(uid));
   }
 
   createUtilisateur(form: NgForm) {
-      console.log(form.value);
-      const utilisateur = new Utilisateur;
-      utilisateur.uid = this.collaborateur.uid;
+    console.log(form.value);
+    const utilisateur = new Utilisateur;
+    utilisateur.uid = this.collaborateur.uid;
 
-      utilisateur.motDePasse = form.value['password'];
-      utilisateur.nom = this.collaborateur.nom;
-      utilisateur.prenom = this.collaborateur.prenom;
-      utilisateur.profil = form.value['profil'];
-      utilisateur.uoAffectation = this.collaborateur.uoAffectation;
-      utilisateur.siteExercice = 'test';
-      utilisateur.fonction = 'test';
+    utilisateur.motDePasse = form.value['password'];
+    utilisateur.nom = this.collaborateur.nom;
+    utilisateur.prenom = this.collaborateur.prenom;
+    utilisateur.profil = form.value['profil'];
+    utilisateur.uoAffectation = this.collaborateur.uoAffectation;
+    utilisateur.siteExercice = 'test';
+    utilisateur.fonction = 'test';
 
-      this.utilisateurService.createUtilisateur(utilisateur);
-      this.reinitialiserFormulaire();
+    this.utilisateurService.createUtilisateur(utilisateur);
+    this.reinitialiserFormulaire();
   }
 
   setUtilisateur(utilisateur: any) {
-      this.utilisateur = utilisateur;
-      this.indicateurUtilisateur = true;
+    this.utilisateur = utilisateur;
+    this.indicateurUtilisateur = true;
   }
 
   setCollaborateur(collaborateur: any) {
-      this.collaborateur = collaborateur;
-      this.indicateurCollaborateur = true;
+    this.collaborateur = collaborateur;
+    this.indicateurCollaborateur = true;
   }
 
   updateUtilisateurProfil(form: NgForm) {
-      console.log(form.value);
-      var utilisateur = new Utilisateur;
-      utilisateur = form.value['utilisateur'];
-      //utilisateur.uid = form.value['uid'];
-      //utilisateur.motDePasse = form.value['password'];
-      //utilisateur.nom = form.value['nom'];
-      //utilisateur.prenom = form.value['prenom'];
-      utilisateur.profil = form.value['profil'];
-      //utilisateur.uoAffectation = form.value['uoAffectation'];
-      //utilisateur.siteExercice = 'test';
-      //utilisateur.fonction = 'test';
+    console.log(form.value);
+    var utilisateur = new Utilisateur;
+    utilisateur = form.value['utilisateur'];
+    //utilisateur.uid = form.value['uid'];
+    //utilisateur.motDePasse = form.value['password'];
+    //utilisateur.nom = form.value['nom'];
+    //utilisateur.prenom = form.value['prenom'];
+    utilisateur.profil = form.value['profil'];
+    //utilisateur.uoAffectation = form.value['uoAffectation'];
+    //utilisateur.siteExercice = 'test';
+    //utilisateur.fonction = 'test';
 
-      this.utilisateurService.updateUtilisateur(utilisateur);
-      this.reinitialiserFormulaire();
+    this.utilisateurService.updateUtilisateur(utilisateur);
+    this.reinitialiserFormulaire();
   }
 
   updateUtilisateurPassword(form: NgForm) {
-      console.log(form.value);
-      var utilisateur = new Utilisateur;
-      utilisateur = form.value['utilisateur'];
-      utilisateur.motDePasse = form.value['password'];
-      this.utilisateurService.updateUtilisateur(utilisateur);
-      this.reinitialiserFormulaire();
+    console.log(form.value);
+    var utilisateur = new Utilisateur;
+    utilisateur = form.value['utilisateur'];
+    utilisateur.motDePasse = form.value['password'];
+    this.utilisateurService.updateUtilisateur(utilisateur);
+    this.reinitialiserFormulaire();
   }
 
 
   deleteUtilisateur(form: NgForm) {
-      console.log(form.value);
-      const utilisateur = form.value['utilisateur'];
-      this.utilisateurService.deleteUtilisateur(utilisateur);
-      this.reinitialiserFormulaire();
+    console.log(form.value);
+    const utilisateur = form.value['utilisateur'];
+    this.utilisateurService.deleteUtilisateur(utilisateur);
+    this.reinitialiserFormulaire();
   }
 
   reinitialiserFormulaire() {
-      this.utilisateur = null;
-      this.indicateurUtilisateur = false;
-      this.collaborateur = null;
-      this.indicateurCollaborateur = false;
-      this.typeModification = '';
+    this.utilisateur = null;
+    this.indicateurUtilisateur = false;
+    this.collaborateur = null;
+    this.indicateurCollaborateur = false;
+    this.typeModification = '';
   }
 
 }
