@@ -265,6 +265,14 @@ export class ThemeService {
                         this.themes.push(response);
                         this.emitThemesSubject();
                     }
+                    if (response.niveau == 2) {
+                      this.themesNiveau2.push(response);
+                      this.emitThemesNiveau2Subject();
+                    }
+                    if (response.niveau == 3) {
+                      this.themesNiveau3.push(response);
+                      this.emitThemesNiveau3Subject();
+                    }
                     return response;
                },
                (error) => {
