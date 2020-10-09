@@ -9,19 +9,6 @@ import { Subscription } from 'rxjs/Subscription';
 @Injectable()
 export class AuthService {
 
-  userSubject = new Subject<any>();
-
-  private user =
-                  { isAuth : false,
-                    username : "",
-                    droits : [{
-                        id: 0,
-                        nom: '',
-                        description: ''
-                    }]
-                  }
-                 ;
-
   themes : any[];
   themesSubscription : Subscription;
 
@@ -29,31 +16,21 @@ export class AuthService {
 
   }
 
-  emitUserSubject() {
-      this.userSubject.next(this.user);
-    }
-
-  signIn() {
-    this.user.isAuth = true;
-    this.emitUserSubject();
-  }
-
   signOut() {
     this.logout();
-    this.user.isAuth = false;
-    this.user.username = '';
-    this.user.droits.splice(0);
-
-    this.emitUserSubject();
     sessionStorage.clear();
   }
 
   getIsAuth() {
-    return this.user.isAuth;
+    if (sessionStorage.getItem('isAuth') == 'true') {
+        return true;
+    } else {
+        return false;
+    }
   }
 
   getUsername() {
-    return this.user.username;
+    return sessionStorage.getItem('username');
   }
 
   // version Angular 6
@@ -71,16 +48,9 @@ export class AuthService {
              .subscribe(isValid => {
                console.log("retour de l'appel = " + isValid)
                if (isValid) {
-                   /* 7_10_2020 - PAS NECESSAIRE - à retirer
-                   sessionStorage.setItem(
-                     'token',
-                     btoa(username + ':' + password)
-                   );
-                   */
-                   this.user.isAuth = true;
-                   this.user.username = username;
+                   sessionStorage.setItem('isAuth', 'true');
+                   sessionStorage.setItem('username', username);
                    this.getProfil(username);
-                   this.emitUserSubject();
                    this.preparationMenuNav();
                    this.router.navigate(['']);
                }
@@ -90,7 +60,7 @@ export class AuthService {
 
   logout() {
        let body = new URLSearchParams();
-       body.set('username', this.user.username);
+       body.set('username', sessionStorage.getItem('username'));
        let url = 'http://localhost:9095/logout';
        let options = {
            headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'),
@@ -108,16 +78,14 @@ export class AuthService {
            withCredentials: true
      };
      this.httpClient
-          //.get<any>('http://localhost:9095/portailci/utilisateurs/getByUID/' + this.user.username, options)
           .get<any>('http://localhost:9095/portailci/profils/get/connectedUser', options)
           .subscribe(
             (response) => {
               console.log('profil : ' + response.nom);
-              this.user.droits = response.droits;
-              for (let droit of this.user.droits) {
+              sessionStorage.setItem('droits', JSON.stringify(response.droits));
+              for (let droit of response.droits) {
                   console.log('droits : ' + droit.nom);
               }
-              this.emitUserSubject();
             },
             (error) => {
               console.log('Erreur ! : ' + error);
@@ -127,12 +95,14 @@ export class AuthService {
 
   controleDroitUser(droitAVerifier: string) : boolean {
       var droits:any[];
-      droits = this.user.droits;
-      for (let droit of droits) {
-          if (droit.nom == droitAVerifier) {
-              return true;
-          }
-      }
+      droits = JSON.parse(sessionStorage.getItem('droits'));
+      if (droits != null) {
+        for (let droit of droits) {
+            if (droit.nom == droitAVerifier) {
+                return true;
+            }
+        }
+      }  
       return false;
   }
 

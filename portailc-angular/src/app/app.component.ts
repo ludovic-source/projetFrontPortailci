@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, NavigationStart } from '@angular/router';
 import { AuthService } from './services/auth.service';
 import { ThemeService } from './services/theme.service';
 import { EditionService } from './services/edition.service';
@@ -18,8 +18,7 @@ export class AppComponent implements OnInit, OnDestroy {
   isModeParametrage = false;
 
   title = 'portailci';
-  user: any;
-  userSubscription : Subscription;
+
   themes : any[];
   themesSubscription : Subscription;
 
@@ -27,7 +26,15 @@ export class AppComponent implements OnInit, OnDestroy {
               private editionService: EditionService,
               private themeService: ThemeService,
               private domSanitizer: DomSanitizer,
-              private router: Router) { }
+              private router: Router) { 
+
+      router.events.subscribe(event => { 
+         if(event instanceof NavigationStart) { 
+            this.authService.preparationMenuNav();
+         } 
+      });   
+
+  }
 
   ngOnInit() {
      this.indicateursEditionSubscription = this.editionService.indicateursEditionSubject.subscribe(
@@ -35,11 +42,6 @@ export class AppComponent implements OnInit, OnDestroy {
                                               this.indicateursEdition = indicateursEdition;
                                                     });
      this.editionService.emitIndicateursEditionSubject();
-     this.userSubscription = this.authService.userSubject.subscribe(
-                (user: any) => {
-                                  this.user = user;
-                               });
-     this.authService.emitUserSubject();
      this.themesSubscription = this.themeService.themesSubject.subscribe(
                 (themes: any[]) => {
                                       this.themes = themes;
@@ -49,7 +51,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
    ngOnDestroy() {
       this.themesSubscription.unsubscribe();
-      this.userSubscription.unsubscribe();
    }
 
    getIsAuth() {
@@ -103,9 +104,6 @@ export class AppComponent implements OnInit, OnDestroy {
    }
 
    getImage(idTheme: number) {
-
-      //return this.domSanitizer.bypassSecurityTrustResourceUrl(window.localStorage.getItem('' + idTheme));
-
       return window.localStorage.getItem('' + idTheme);  // pour récupérer la vraie image du back-end
       // ci-dessous, juste pour les tests en attendant la mise en place du getImage()
 /*

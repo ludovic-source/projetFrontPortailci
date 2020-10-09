@@ -11,14 +11,9 @@ import { Subscription } from 'rxjs/Subscription';
 })
 export class SectionArticleConnexionComponent implements OnInit, OnDestroy {
 
-  user: any;
-  userSubscription: Subscription;
-
   constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
-     this.userSubscription = this.authService.userSubject.subscribe(this.user);
-     this.authService.emitUserSubject();
   }
 
   onSignInForm(form: NgForm) {
@@ -27,7 +22,7 @@ export class SectionArticleConnexionComponent implements OnInit, OnDestroy {
       this.login(username, password);
    }
 
-   async login(username: string, password: string) {
+   login(username: string, password: string) {
       this.authService.login(username, password);
    }
 
@@ -36,7 +31,6 @@ export class SectionArticleConnexionComponent implements OnInit, OnDestroy {
    }
 
    ngOnDestroy() {
-      this.userSubscription.unsubscribe();
    }
 
    getIsAuth() {
