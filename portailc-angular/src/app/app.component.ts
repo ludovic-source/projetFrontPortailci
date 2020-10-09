@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, NavigationStart } from '@angular/router';
 import { AuthService } from './services/auth.service';
 import { ThemeService } from './services/theme.service';
 import { EditionService } from './services/edition.service';
@@ -7,9 +7,9 @@ import { Subscription } from 'rxjs/Subscription';
 import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
-selector: 'app-root',
-templateUrl: './app.component.html',
-styleUrls: ['./app.component.css']
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit, OnDestroy {
 
@@ -18,117 +18,115 @@ export class AppComponent implements OnInit, OnDestroy {
   isModeParametrage = false;
 
   title = 'portailci';
-  user: any;
-  userSubscription: Subscription;
+
   themes: any[];
   themesSubscription: Subscription;
 
   constructor(private authService: AuthService,
-              private editionService: EditionService,
-              private themeService: ThemeService,
-              private domSanitizer: DomSanitizer,
-              private router: Router) { }
+    private editionService: EditionService,
+    private themeService: ThemeService,
+    private domSanitizer: DomSanitizer,
+    private router: Router) {
 
-  ngOnInit() {
-     this.indicateursEditionSubscription = this.editionService.indicateursEditionSubject.subscribe(
-                        (indicateursEdition: any) => {
-                                              this.indicateursEdition = indicateursEdition;
-                                                    });
-     this.editionService.emitIndicateursEditionSubject();
-     this.userSubscription = this.authService.userSubject.subscribe(
-                (user: any) => {
-                                  this.user = user;
-                               });
-     this.authService.emitUserSubject();
-     this.themesSubscription = this.themeService.themesSubject.subscribe(
-                (themes: any[]) => {
-                                      this.themes = themes;
-                                   });
-     this.themeService.emitThemesSubject();
+    router.events.subscribe(event => {
+      if (event instanceof NavigationStart) {
+        this.authService.preparationMenuNav();
+      }
+    });
+
   }
 
-   ngOnDestroy() {
-      this.themesSubscription.unsubscribe();
-      this.userSubscription.unsubscribe();
-   }
+  ngOnInit() {
+    this.indicateursEditionSubscription = this.editionService.indicateursEditionSubject.subscribe(
+      (indicateursEdition: any) => {
+        this.indicateursEdition = indicateursEdition;
+      });
+    this.editionService.emitIndicateursEditionSubject();
+    this.themesSubscription = this.themeService.themesSubject.subscribe(
+      (themes: any[]) => {
+        this.themes = themes;
+      });
+    this.themeService.emitThemesSubject();
+  }
 
-   getIsAuth() {
-      return this.authService.getIsAuth();
-   }
+  ngOnDestroy() {
+    this.themesSubscription.unsubscribe();
+  }
 
-   getUsername() {
-      return this.authService.getUsername();
-   }
+  getIsAuth() {
+    return this.authService.getIsAuth();
+  }
 
-   onSignOut() {
-      this.isModeParametrage = false;
-      this.editionService.desactiverModeEdition();
-      this.authService.signOut();
-   }
+  getUsername() {
+    return this.authService.getUsername();
+  }
 
-   controleDroitUser(droit: string): boolean {
-      return this.authService.controleDroitUser(droit);
-   }
+  onSignOut() {
+    this.isModeParametrage = false;
+    this.editionService.desactiverModeEdition();
+    this.authService.signOut();
+  }
 
-   activerModeEdition() {
-      this.isModeParametrage = false;
-      this.editionService.activerModeEdition();
-   }
+  controleDroitUser(droit: string): boolean {
+    return this.authService.controleDroitUser(droit);
+  }
 
-   desactiverModeEdition() {
-      this.editionService.desactiverModeEdition();
-   }
+  activerModeEdition() {
+    this.isModeParametrage = false;
+    this.editionService.activerModeEdition();
+  }
 
-   getIsModeParametrage(): boolean {
-      return this.isModeParametrage;
-   }
+  desactiverModeEdition() {
+    this.editionService.desactiverModeEdition();
+  }
 
-   activerModeParametrage() {
-      this.isModeParametrage = true;
-      this.editionService.desactiverModeEdition();
-   }
+  getIsModeParametrage(): boolean {
+    return this.isModeParametrage;
+  }
 
-   desactiverModeParametrage() {
-      this.isModeParametrage = false;
-      this.router.navigate(['theme']);
-   }
+  activerModeParametrage() {
+    this.isModeParametrage = true;
+    this.editionService.desactiverModeEdition();
+  }
 
-   editerThematique(lieuEdition: number) {
-      this.editionService.setLieuEditionThematique(lieuEdition);
-   }
+  desactiverModeParametrage() {
+    this.isModeParametrage = false;
+    this.router.navigate(['theme']);
+  }
 
-   editerLien(lieuEdition: number) {
-      this.editionService.revenirDebutFormulaire();
-      this.editionService.setLieuEditionLien(lieuEdition);
-   }
+  editerThematique(lieuEdition: number) {
+    this.editionService.setLieuEditionThematique(lieuEdition);
+  }
 
-   getImage(idTheme: number) {
+  editerLien(lieuEdition: number) {
+    this.editionService.revenirDebutFormulaire();
+    this.editionService.setLieuEditionLien(lieuEdition);
+  }
 
-      //return this.domSanitizer.bypassSecurityTrustResourceUrl(window.localStorage.getItem('' + idTheme));
-
-      return window.localStorage.getItem('' + idTheme);  // pour récupérer la vraie image du back-end
-      // ci-dessous, juste pour les tests en attendant la mise en place du getImage()
-/*
-      if (idTheme == 1) {
-          return 'icons8_f1_car_24px.png';
-      }
-      if (idTheme == 2) {
-          return 'icons8_golf_cart_24px.png';
-      }
-      if (idTheme == 3) {
-          return 'icons8_people_in_car_side_view_24px.png';
-      }
-      if (idTheme == 4) {
-          return 'icons8_food_truck_24px.png';
-      }
-      if (idTheme == 5) {
-          return 'icons8_tractor_24px.png';
-      }
-      if (idTheme == 36) {
-          return 'icons8_rocket_24px.png';
-      }
-      return '';
-*/
-   }
+  getImage(idTheme: number) {
+    return window.localStorage.getItem('' + idTheme);  // pour récupérer la vraie image du back-end
+    // ci-dessous, juste pour les tests en attendant la mise en place du getImage()
+    /*
+          if (idTheme == 1) {
+              return 'icons8_f1_car_24px.png';
+          }
+          if (idTheme == 2) {
+              return 'icons8_golf_cart_24px.png';
+          }
+          if (idTheme == 3) {
+              return 'icons8_people_in_car_side_view_24px.png';
+          }
+          if (idTheme == 4) {
+              return 'icons8_food_truck_24px.png';
+          }
+          if (idTheme == 5) {
+              return 'icons8_tractor_24px.png';
+          }
+          if (idTheme == 36) {
+              return 'icons8_rocket_24px.png';
+          }
+          return '';
+    */
+  }
 
 }

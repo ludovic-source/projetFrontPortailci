@@ -9,6 +9,7 @@ import { Subscription } from 'rxjs/Subscription';
 @Injectable()
 export class AuthService {
 
+<<<<<<< HEAD
   userSubject = new Subject<any>();
 
   private user =
@@ -24,37 +25,35 @@ export class AuthService {
 
   themes: any[];
   themesSubscription: Subscription;
+=======
+  themes : any[];
+  themesSubscription : Subscription;
+>>>>>>> ec6c362... Pour que le bouton actualiser du navigateur ne ferme pas la session, j'ai stocké les informations du user dans le sessionStorage, et j'ai ajouté une observation de l'évènement NavigationStart pour indiquer au composant app.component.ts qu'il faut récupérer les thèmes pour le menu.
 
   constructor(private httpClient: HttpClient, private themeService: ThemeService, private router: Router) {
 
   }
 
-  emitUserSubject() {
-      this.userSubject.next(this.user);
-    }
-
-  signIn() {
-    this.user.isAuth = true;
-    this.emitUserSubject();
-  }
-
   signOut() {
     this.logout();
-    this.user.isAuth = false;
-    this.user.username = '';
-    this.user.droits.splice(0);
-
-    this.emitUserSubject();
     sessionStorage.clear();
   }
 
   getIsAuth() {
+<<<<<<< HEAD
     return this.user.isAuth;
     // return true;
+=======
+    if (sessionStorage.getItem('isAuth') == 'true') {
+        return true;
+    } else {
+        return false;
+    }
+>>>>>>> ec6c362... Pour que le bouton actualiser du navigateur ne ferme pas la session, j'ai stocké les informations du user dans le sessionStorage, et j'ai ajouté une observation de l'évènement NavigationStart pour indiquer au composant app.component.ts qu'il faut récupérer les thèmes pour le menu.
   }
 
   getUsername() {
-    return this.user.username;
+    return sessionStorage.getItem('username');
   }
 
   // version Angular 6
@@ -72,16 +71,9 @@ export class AuthService {
              .subscribe(isValid => {
                console.log("retour de l'appel = " + isValid)
                if (isValid) {
-                   /* 7_10_2020 - PAS NECESSAIRE - à retirer
-                   sessionStorage.setItem(
-                     'token',
-                     btoa(username + ':' + password)
-                   );
-                   */
-                   this.user.isAuth = true;
-                   this.user.username = username;
+                   sessionStorage.setItem('isAuth', 'true');
+                   sessionStorage.setItem('username', username);
                    this.getProfil(username);
-                   this.emitUserSubject();
                    this.preparationMenuNav();
                    this.router.navigate(['navigation']);
                }
@@ -91,7 +83,7 @@ export class AuthService {
 
   logout() {
        let body = new URLSearchParams();
-       body.set('username', this.user.username);
+       body.set('username', sessionStorage.getItem('username'));
        let url = 'http://localhost:9095/logout';
        let options = {
            headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'),
@@ -109,16 +101,14 @@ export class AuthService {
            withCredentials: true
      };
      this.httpClient
-          //.get<any>('http://localhost:9095/portailci/utilisateurs/getByUID/' + this.user.username, options)
           .get<any>('http://localhost:9095/portailci/profils/get/connectedUser', options)
           .subscribe(
             (response) => {
               console.log('profil : ' + response.nom);
-              this.user.droits = response.droits;
-              for (let droit of this.user.droits) {
+              sessionStorage.setItem('droits', JSON.stringify(response.droits));
+              for (let droit of response.droits) {
                   console.log('droits : ' + droit.nom);
               }
-              this.emitUserSubject();
             },
             (error) => {
               console.log('Erreur ! : ' + error);
@@ -128,12 +118,14 @@ export class AuthService {
 
   controleDroitUser(droitAVerifier: string) : boolean {
       var droits:any[];
-      droits = this.user.droits;
-      for (let droit of droits) {
-          if (droit.nom == droitAVerifier) {
-              return true;
-          }
-      }
+      droits = JSON.parse(sessionStorage.getItem('droits'));
+      if (droits != null) {
+        for (let droit of droits) {
+            if (droit.nom == droitAVerifier) {
+                return true;
+            }
+        }
+      }  
       return false;
   }
 
