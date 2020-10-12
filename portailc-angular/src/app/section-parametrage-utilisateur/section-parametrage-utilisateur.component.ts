@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { Subscription } from 'rxjs/Subscription';
 import { Profil } from '../models/Profil';
+import { User } from '../models/User';
 import { Utilisateur } from '../models/Utilisateur';
 import { ProfilService } from '../services/profil.service';
 import { UtilisateurService } from '../services/utilisateur.service';
@@ -14,7 +15,7 @@ import { UtilisateurService } from '../services/utilisateur.service';
 })
 export class SectionParametrageUtilisateurComponent implements OnInit {
 
-  collaborateur$: Observable<Utilisateur[]>;
+  collaborateur$: Observable<User>;
 
   searchInRefoForm: FormGroup;
   /////////////////////////////

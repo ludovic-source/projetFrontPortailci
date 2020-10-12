@@ -1,0 +1,10 @@
+.container {
+  display: flex;
+  justify-content: center;
+}
+
+h2 {
+  text-align: center;
+  color: rgb(8, 160, 89);
+  font-size: 2em;
+}

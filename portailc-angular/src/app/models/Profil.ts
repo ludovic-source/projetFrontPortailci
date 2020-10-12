@@ -1,9 +1,11 @@
+import { Droit } from './Droit';
+
 export class Profil {
 
     id: number;
     nom: string;
     description: string;
-    droits: any;
+    droits: Droit[];
 
     constructor() { }
 

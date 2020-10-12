@@ -1,0 +1,20 @@
+.picto {
+  max-height: 30px;
+  max-width: 30px;
+}
+
+nav
+{
+	border-bottom: 1px solid black;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	align-items: center;
+	height: 60px;
+}
+
+.menu_options
+{
+  display: flex;
+  flex-direction: row;
+}

@@ -1,3 +1,172 @@
+html, body, app-root{
+  margin: 0;
+  height: 100%;
+}
+
+.page {
+  width:100%;
+  height: 100%;
+  display: block;
+  padding-top: 55px;
+}
+
+.p-ripple.purple .p-ink {
+  background: rgba(256,39,176,.3);
+}
+
+app-root {
+  display: flex;
+  flex-wrap: wrap;
+  height: 100vh;
+}
+
+app-header {
+  background-color: rgb(0, 115, 72);
+  color: white;
+  height:10vh;
+  width: 100%;
+  display: block;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  box-shadow: 0px 6px 20px 1px rgba(0,0,0,0.5);
+  z-index: 10;
+}
+
+.content {
+  width: 100%;
+  /* padding: 10% 0; */
+  /* min-height:auto; */
+
+  max-height: 80%;
+  margin-top: 5%;
+  background-color:white;
+  display: block;
+  /* justify-content: center; */
+}
+
+router-outlet {
+
+  /* display: none; */
+  /* flex-flow: row wrap; */
+  background-color: crimson;
+  min-height: auto;
+}
+
+app-signin {
+  /* background-color: darkblue; */
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+app-admin-panel, app-menu-arborescent-container {
+  height: 100%;
+  width: 100%;
+  /* display: flex; */
+  align-items: center;
+  flex-direction: column;
+}
+
+app-footer {
+  /* margin-top: auto; */
+  /* background: rgb(8, 160, 89); */
+  background: rgb(57, 168, 123);
+  color: white;
+  height:10%;
+  /* position: relative; */
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: block;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0px -6px 20px 1px rgba(0,0,0,0.3);
+}
+
+.contact {
+  height: 100px;
+  width: 100px;
+  background-color: rgb(139, 200, 170);
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  z-index: 10000;
+  bottom: 0;
+  right: 0;
+  margin: 0 50px 50px 0;
+  border-radius: 100%;
+  box-shadow: inset 0px 0px 20px 2px rgb(0, 115, 72,0.3);
+
+}
+.contact> mat-icon {
+  font-size: 2em;
+
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.btn, .btn:hover, .btn:focus
+{
+  color: #fff;
+  background-color: rgb(0, 115, 72);
+  border-color: #076b39;
+  box-shadow: inset 0 3px 5px rgba(255, 255, 255, 0.5);
+
+}
+ .btn:active {
+  color: rgb(0, 115, 72);
+  background-color: #fff;
+  border-color: #076b39;
+  box-shadow: inset 0 3px 5px rgba(0, 115, 72, 0.5);
+
+
+}
+/* button > .submit {
+  align-items: flex-end;
+} */
+.right {
+  display: flex;
+  align-content: end;
+}
+form > .btnsubmit {
+  display: flex;
+  justify-content: center;
+}
+.btnsubmit .btn {
+  width: 200px;
+}
+
+.inline {
+  display: inline;
+}
+.flex {
+  display: flex;
+
+}
+ul > li {
+  align-self: center;
+  margin: 0 10px;
+}
+.navigation {
+  display: flex;
+  justify-content: flex-end;
+  ;
+}
+
+
+
+
+
+
+/***********************************************************/
+/*
+ARCHIVE CSS LUDOVIC
 body
 {
 	font-family: "Times New Roman";
@@ -26,7 +195,6 @@ a:visited
 
 header
 {
-	/*border : 0.5px solid black; */
 	height: 90px;
 	display: flex;
 	flex-direction: row;
@@ -35,7 +203,6 @@ header
 
 #bloc_contact
 {
-	/*border : 0.5px solid black;*/
 	display: flex;
 	justify-content: space-between;
 	flex-direction: row;
@@ -44,7 +211,6 @@ header
 
 #bloc_titre
 {
-	/*border : 0.5px solid black;*/
 	flex : 2;
 	text-align: center;
 	align-self: flex-end;
@@ -52,7 +218,6 @@ header
 
 #bloc_utilisateur
 {
-	/*border : 0.5px solid black;*/
 	display: flex;
 	flex-direction: row;
 	justify-content: space-around;
@@ -81,11 +246,6 @@ nav
   border: 0px;
 }
 
-/*.menu_actif
-{
-	border-bottom: 3px solid black;
-}*/
-
 #section_theme
 {
 	display: flex;
@@ -95,7 +255,6 @@ nav
 
 #bloc_theme
 {
-	/*border : 0.5px solid black;*/
 	min-height : 500px;
 	margin-left: 5px;
 	margin-right: 5px;
@@ -112,7 +271,6 @@ nav
 
 .bloc_sous_theme
 {
-	/*border : 0.5px solid black;*/
 	margin: 10px 20px 20px 20px;
 	display: flex;
 	justify-content: flex-start;
@@ -129,7 +287,6 @@ nav
 
 .bloc_sous_sous_theme
 {
-	/*border : 0.5px solid black;*/
 	margin: 0px 5px 5px 0px;
 	display: flex;
 }
@@ -141,7 +298,6 @@ nav
 
 .bloc_titre
 {
-  /*border : 0.5px solid black;*/
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -157,7 +313,6 @@ nav
 
 .bloc_lien
 {
-	/*border : 0.5px solid black;*/
 	color : grey;
 }
 
@@ -175,7 +330,6 @@ nav
 
 #bloc_module_edition
 {
-  /*border: 0.5px double grey;*/
   min-width: 400px;
 	padding-left: 20px;
 	padding-right: 20px;
@@ -198,15 +352,6 @@ nav
   justify-content: space-around;
 }
 
-#bloc_menu_parametrage
-{
-  /*text-align: center;*/
-}
-
-.menu_parametrage
-{
-
-}
 
 .bouton_gris_clair
 {
@@ -292,4 +437,4 @@ td, th
 .active {
   border-bottom: 3px solid black;
 }
-
+*/

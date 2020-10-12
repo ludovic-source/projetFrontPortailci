@@ -5,15 +5,21 @@ import { Utilisateur } from '../models/Utilisateur';
 import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { mapTo } from 'rxjs-compat/operator/mapTo';
+import { User } from '../models/User';
+import { Profil } from '../models/Profil';
 
 @Injectable()
 export class UtilisateurService {
 
   // REPRESENTE LA SOURCE DE DONNEES UNIQUE DISTRIBUEE A TOUS LES COMPONENTS
-  private _collaborateurSubject: BehaviorSubject<Utilisateur[]> = new BehaviorSubject([]);
+  // Le BehaviorSubject va nous permettre de récupérer la valeur du Subject grâce à getValue()
+  private _collaborateurSubject: BehaviorSubject<any> = new BehaviorSubject({});
+  private _utilisateursSubject: BehaviorSubject<User[]> = new BehaviorSubject([]);
 
   // users$ est un Observable et peut être consommé par nos Components
-  readonly collaborateur$: Observable<Utilisateur[]> =  this._collaborateurSubject.asObservable();
+  readonly collaborateur$: Observable<User> =  this._collaborateurSubject.asObservable();
+  readonly utilisateurs$: Observable<User[]> =  this._utilisateursSubject.asObservable();
 
 
   allUtilisateursSubject = new Subject<any[]>();
@@ -64,6 +70,20 @@ export class UtilisateurService {
   constructor(private httpClient: HttpClient) {
   }
 
+  getCollaborateurValue() {
+    return this._collaborateurSubject.getValue();
+  }
+  setCollaborateurSubject(data) {
+    this._collaborateurSubject.next(data);
+  }
+
+  getUtilisateursValue() {
+    return this._utilisateursSubject.getValue();
+  }
+  setUtilisateursSubject(data) {
+    this._utilisateursSubject.next(data);
+  }
+
   emitAllUtilisateursSubject() {
     this.allUtilisateursSubject.next(this.allUtilisateurs);
   }
@@ -77,14 +97,18 @@ export class UtilisateurService {
       withCredentials: true
     };
     return this.httpClient.get(this.url + '/getRefogByUID/' + uid, options)
+      .pipe(
+        map((response: any) => response.data)
+      )
       .toPromise()
       .then(
-        response => console.log(response)
-        //this._collaborateurSubject.next(data)
-      );
+        (response: any) => {
+          console.log(response);
+          this._collaborateurSubject.next(response);
+        });
   }
 
-  getAllUtilisateurs() {
+  getAllUtilisateurs(): any {
     let options = {
       withCredentials: true
     };
@@ -95,6 +119,10 @@ export class UtilisateurService {
           this.allUtilisateurs = response;
           console.log('récupération de tous les utilisateurs OK');
           this.emitAllUtilisateursSubject();
+
+          //
+          //console.log(response);
+          this._utilisateursSubject.next(response);
         },
         (error) => {
           console.log('Erreur ! : ' + error);
