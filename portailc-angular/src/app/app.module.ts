@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
@@ -25,14 +26,28 @@ import { SectionThemeEditionLienComponent } from './section-theme-edition-lien/s
 import { SectionParametrageComponent } from './section-parametrage/section-parametrage.component';
 import { SectionParametrageProfilComponent } from './section-parametrage-profil/section-parametrage-profil.component';
 import { SectionParametrageUtilisateurComponent } from './section-parametrage-utilisateur/section-parametrage-utilisateur.component';
+import { HeaderComponent } from './header/header.component';
+import { PrimeNgModule } from './shared/prime-ng/prime-ng.module';
 
 const appRoutes: Routes = [
-  { path: 'connexion', component: SectionArticleConnexionComponent },
-  { path: 'theme', canActivate: [AuthGuard], component: SectionComponent },
-  { path: 'theme/:id', canActivate: [AuthGuard], component: SectionComponent },
-  { path: 'edition', canActivate: [AuthGuard], component: SectionThemeEditionComponent },
+
+  {
+    path: 'admin',
+    loadChildren: () => import('./admin-panel/admin-panel.module')
+                        .then(module => module.AdminPanelModule)
+  },
+  {
+    path: 'navigation',
+    loadChildren: () => import('./menu-arborescent-container/menu-arborescent-container.module')
+                        .then(module => module.MenuArborescentContainerModule)
+  },
+  // { path: 'theme', canActivate: [AuthGuard], component: SectionComponent },
+  // { path: 'theme/:id', canActivate: [AuthGuard], component: SectionComponent },
+  // { path: 'edition', canActivate: [AuthGuard], component: SectionThemeEditionComponent },
   { path: 'parametrage', canActivate: [AuthGuard], component: SectionParametrageComponent },
-  { path: '', component: SectionArticleConnexionComponent }
+  { path: 'connexion', component: SectionArticleConnexionComponent },
+  { path: '', redirectTo: 'connexion', pathMatch: 'full'},
+  { path: '**', redirectTo: 'connexion'}
 ];
 
 @NgModule({
@@ -46,14 +61,18 @@ const appRoutes: Routes = [
     SectionThemeEditionLienComponent,
     SectionParametrageComponent,
     SectionParametrageProfilComponent,
-    SectionParametrageUtilisateurComponent
+    SectionParametrageUtilisateurComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     FormsModule,
     AppRoutingModule,
     HttpClientModule,
-    RouterModule.forRoot(appRoutes)
+    ReactiveFormsModule,
+    RouterModule.forRoot(appRoutes),
+    PrimeNgModule
   ],
   providers: [
     AuthGuard,
@@ -65,6 +84,9 @@ const appRoutes: Routes = [
     ProfilService,
     DroitService,
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
+  ],
+  exports: [
+    PrimeNgModule
   ],
   bootstrap: [AppComponent]
 })

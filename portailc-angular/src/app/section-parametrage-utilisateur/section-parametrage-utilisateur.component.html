@@ -14,12 +14,16 @@
   <!-- formulaire pour les créations d'utilisateur -->
   <div class="bloc_modification_parametrage_form"
        *ngIf="typeModification === 'create'">
-
+    <form (ngSubmit)="searchCollaborateurFromRefo()" [formGroup]="searchInRefoForm">
+      <input type="text" formControlName="uid">
+      <button type="submit">Rechercher Collaborateur</button>
+    </form>
     <form (ngSubmit)="createUtilisateur(f)" #f="ngForm">
       <p>
-        <em>Sélectionnez le collaborateur à créer : </em>
+        <em>Rechercher le collaborateur à créer : </em>
         <select id="collaborateur_select" name="collaborateur"
-                (ngModelChange)="setCollaborateur($event)" ngModel required>
+                (ngModelChange)="setCollaborateur($event)"
+                ngModel required>
           <ng-container *ngFor="let collaborateur of allCollaborateurs">
             <option [ngValue]="collaborateur">{{ collaborateur.uid}} - {{ collaborateur.nom }}</option>
           </ng-container>

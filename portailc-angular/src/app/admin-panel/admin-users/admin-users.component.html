@@ -1,0 +1,126 @@
+<p-toast></p-toast>
+
+<div class="card">
+  <p-toolbar styleClass="p-mb-4">
+    <ng-template pTemplate="left">
+      <div class="p-mr-2">
+        <button pButton pRipple label="Ajouter" icon="pi pi-plus" class="p-button-success p-m-2"
+          (click)="openNew()"></button>
+      </div>
+      <button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger p-m-2"
+        (click)="deleteSelectedUsers()" [disabled]="!selectedUsers || !selectedUsers.length"></button>
+    </ng-template>
+
+    <ng-template pTemplate="right">
+
+      <div class="p-d-flex p-ai-center p-jc-between">
+        <span class="p-input-icon-left">
+          <i class="pi pi-search"></i>
+          <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+            placeholder="Search...">
+        </span>
+      </div>
+    </ng-template>
+  </p-toolbar>
+
+  <p-table #dt [value]="users$ | async" [rows]="10" [paginator]="true"
+    [globalFilterFields]="['uid','nom','prenom','uoAffectation','siteExercice', 'fonction', 'profil']"
+    [(selection)]="selectedUsers" [rowHover]="true" dataKey="id"
+    currentPageReportTemplate="Consultation des utilisateurs {first} à {last} sur {totalRecords} "
+    [showCurrentPageReport]="true">
+
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 3rem">
+          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+        </th>
+        <th pSortableColumn="uid">UID <p-sortIcon field="uid"></p-sortIcon>
+        </th>
+        <th pSortableColumn="nom">Nom <p-sortIcon field="nom"></p-sortIcon>
+        </th>
+        <th pSortableColumn="prenom">Prénom <p-sortIcon field="prenom"></p-sortIcon>
+        </th>
+        <th pSortableColumn="uoAffectation">UO Affectation <p-sortIcon field="uoAffectation"></p-sortIcon>
+        </th>
+        <th pSortableColumn="siteExercice">Site d'Exercice <p-sortIcon field="siteExercice"></p-sortIcon>
+        </th>
+        <th pSortableColumn="fonction">Fonction <p-sortIcon field="fonction"></p-sortIcon>
+        </th>
+        <th pSortableColumn="profil">Profil <p-sortIcon field="profil"></p-sortIcon>
+        </th>
+        <th></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-user>
+      <tr>
+        <td>
+          <p-tableCheckbox [value]="user"></p-tableCheckbox>
+        </td>
+        <td>{{user.uid}}</td>
+        <td>{{user.nom}}</td>
+        <td>{{user.prenom}}</td>
+        <td>{{user.uoAffectation}}</td>
+        <td>{{user.siteExercice}}</td>
+        <td>{{user.fonction}}</td>
+        <td>{{user.profil}}</td>
+
+        <td>
+          <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2"
+            (click)="editUser(user)"></button>
+          <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
+            (click)="deleteUser(user)"></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<p-dialog [(visible)]="userDialog" [style]="{width: '50%'}" header="User Details" [modal]="true" styleClass="p-fluid">
+  <ng-template pTemplate="header">
+
+  </ng-template>
+  <ng-template pTemplate="content">
+    <div class="p-field">
+      <form (ngSubmit)="searchCollaborateurFromRefo()" [formGroup]="searchInRefoForm">
+        <input type="text" formControlName="uid">
+        <button type="submit">Rechercher Collaborateur</button>
+      </form>
+    </div>
+    <div class="p-field">
+      <label for="nom">Nom : </label>
+      <input type="text" pInputText id="nom" [(ngModel)]="user.nom" required autofocus />
+      <small class="p-invalid" *ngIf="submitted && !user.nom">Nom requis.</small>
+    </div>
+    <div class="p-field">
+      <label for="prenom">Prénom : </label>
+      <input id="prenom" pInputText [(ngModel)]="user.prenom" required />
+    </div>
+    <div class="p-field">
+      <label for="uoAffectation">UO Affectation : </label>
+      <input id="uoAffectation" pInputText [(ngModel)]="user.uoAffectation" required />
+    </div>
+    <div class="p-field">
+      <label for="siteExercie">Site d'Exercice : </label>
+      <input id="siteExercie" pInputText [(ngModel)]="user.siteExercice" required />
+    </div>
+    <div class="p-field">
+      <label for="fonction">Fonction : </label>
+      <input id="fonction" pInputText [(ngModel)]="user.fonction" required />
+    </div>
+    <div class="p-field">
+      <label for="profil">Profil : </label>
+      <select id="profil" [(ngModel)]="user.profil" required>
+        <option selected>Utilisateur</option>
+        <option>Rédacteur</option>
+        <option>Administrateur</option>
+      </select>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+    <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveUser()"></button>
+  </ng-template>
+</p-dialog>
+
+<p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>

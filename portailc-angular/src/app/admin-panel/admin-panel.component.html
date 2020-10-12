@@ -1,0 +1,17 @@
+<div class="container">
+  <div class="adminTitle">
+    Panneau d'administration
+  </div>
+
+  <div class="adminpanel container">
+    <div>
+      <div>
+        <p-tabMenu [model]="items" [activeItem]="activeItem"></p-tabMenu>
+      </div>
+      <div class="adminContent">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -1,0 +1,34 @@
+<div class="col-xs-6 title">
+  Portail de l'automobile
+</div>
+
+
+<div class="col-xs-6 navigation">
+
+  <ul *ngIf="getIsAuth() === true" class="nav navbar-nav flex">
+    <li>Bienvenue {{ getUsername() }} !</li>
+    <li class="active" *ngIf="getIsAuth() === true
+    && ( controleDroitUser('Modification') === true
+         || controleDroitUser('Création') === true
+         || controleDroitUser('Suppression') === true)">
+      <a *ngIf="indicateursEdition.isModeEdition != true" (click)="activerModeEdition()">
+        <img src="/assets/images/icons8_pencil_30px.png" alt="activer le mode édition de liens"
+          title="activer le mode édition de liens">
+      </a>
+      <a *ngIf="indicateursEdition.isModeEdition === true" (click)="desactiverModeEdition()">
+        <img src="/assets/images/icons8_no_edit_30px.png" alt="désactiver le mode édition de liens"
+          title="désactiver le mode édition de liens">
+      </a>
+    </li>
+    <li class="active"  *ngIf="controleDroitUser('Administration') === true">
+      <a (click)="onAdmin()">
+        <i class="pi pi-cog"></i>
+      </a>
+    </li>
+    <li class="active">
+      <a (click)="onSignOut()">
+        <i class="fas fa-sign-out-alt"></i>
+      </a>
+    </li>
+  </ul>
+</div>

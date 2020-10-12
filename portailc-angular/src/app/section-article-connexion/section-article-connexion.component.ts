@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { Subscription } from 'rxjs/Subscription';
@@ -13,34 +13,69 @@ export class SectionArticleConnexionComponent implements OnInit, OnDestroy {
 
   user: any;
   userSubscription: Subscription;
+  ////////////////
 
-  constructor(private authService: AuthService, private router: Router) { }
+  signInForm: FormGroup;
+  errorMessage: string;
+
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private formBuilder: FormBuilder
+  ) { }
+
 
   ngOnInit(): void {
-     this.userSubscription = this.authService.userSubject.subscribe(this.user);
-     this.authService.emitUserSubject();
+
+    this.initForm();
+    this.userSubscription = this.authService.userSubject.subscribe(this.user);
+    this.authService.emitUserSubject();
+  }
+
+  initForm() {
+    this.signInForm = this.formBuilder.group({
+      uid: ['', [Validators.required, Validators.pattern(/[0-9a-zA-Z]{6}/)]],
+      motDePasse: ['', [Validators.required, Validators.pattern(/[0-9a-zA-Z]{6,}/)]]
+    });
+  }
+
+  onSignIn() {
+    const uid = this.signInForm.get('uid').value;
+    const motDePasse = this.signInForm.get('motDePasse').value;
+
+    console.log('UID = ' + uid);
+    console.log('Mot de passe = ' + motDePasse);
+    this.authService.login(uid, motDePasse);
+    /*this.authService.signIn(uid, motDePasse).then(
+      () => {
+        this.router.navigate(['home']);
+      },
+      (error) => {
+        this.errorMessage = error;
+      }
+    ); */
   }
 
   onSignInForm(form: NgForm) {
-      const username = form.value['username'];
-      const password = form.value['password'];
-      this.login(username, password);
-   }
+    const username = form.value['username'];
+    const password = form.value['password'];
+    this.login(username, password);
+  }
 
-   async login(username: string, password: string) {
-      this.authService.login(username, password);
-   }
+  async login(username: string, password: string) {
+    this.authService.login(username, password);
+  }
 
-   onSignOut() {
-      this.authService.signOut();
-   }
+  onSignOut() {
+    this.authService.signOut();
+  }
 
-   ngOnDestroy() {
-      this.userSubscription.unsubscribe();
-   }
+  ngOnDestroy() {
+    this.userSubscription.unsubscribe();
+  }
 
-   getIsAuth() {
-      return this.authService.getIsAuth();
-   }
+  getIsAuth() {
+    return this.authService.getIsAuth();
+  }
 
 }

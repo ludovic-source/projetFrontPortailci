@@ -19,9 +19,9 @@ export class AppComponent implements OnInit, OnDestroy {
 
   title = 'portailci';
   user: any;
-  userSubscription : Subscription;
-  themes : any[];
-  themesSubscription : Subscription;
+  userSubscription: Subscription;
+  themes: any[];
+  themesSubscription: Subscription;
 
   constructor(private authService: AuthService,
               private editionService: EditionService,
@@ -57,7 +57,7 @@ export class AppComponent implements OnInit, OnDestroy {
    }
 
    getUsername() {
-      return this.authService.getUsername()
+      return this.authService.getUsername();
    }
 
    onSignOut() {

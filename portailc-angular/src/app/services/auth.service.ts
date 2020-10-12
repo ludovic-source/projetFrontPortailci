@@ -22,8 +22,8 @@ export class AuthService {
                   }
                  ;
 
-  themes : any[];
-  themesSubscription : Subscription;
+  themes: any[];
+  themesSubscription: Subscription;
 
   constructor(private httpClient: HttpClient, private themeService: ThemeService, private router: Router) {
 
@@ -50,6 +50,7 @@ export class AuthService {
 
   getIsAuth() {
     return this.user.isAuth;
+    // return true;
   }
 
   getUsername() {
@@ -82,7 +83,7 @@ export class AuthService {
                    this.getProfil(username);
                    this.emitUserSubject();
                    this.preparationMenuNav();
-                   this.router.navigate(['']);
+                   this.router.navigate(['navigation']);
                }
        });
 
