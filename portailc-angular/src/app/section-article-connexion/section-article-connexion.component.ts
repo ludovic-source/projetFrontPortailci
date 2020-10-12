@@ -11,10 +11,6 @@ import { Subscription } from 'rxjs/Subscription';
 })
 export class SectionArticleConnexionComponent implements OnInit, OnDestroy {
 
-  user: any;
-  userSubscription: Subscription;
-  ////////////////
-
   signInForm: FormGroup;
   errorMessage: string;
 
@@ -28,8 +24,6 @@ export class SectionArticleConnexionComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
 
     this.initForm();
-    this.userSubscription = this.authService.userSubject.subscribe(this.user);
-    this.authService.emitUserSubject();
   }
 
   initForm() {
@@ -62,7 +56,7 @@ export class SectionArticleConnexionComponent implements OnInit, OnDestroy {
     this.login(username, password);
   }
 
-  async login(username: string, password: string) {
+  login(username: string, password: string) {
     this.authService.login(username, password);
   }
 
@@ -70,9 +64,7 @@ export class SectionArticleConnexionComponent implements OnInit, OnDestroy {
     this.authService.signOut();
   }
 
-  ngOnDestroy() {
-    this.userSubscription.unsubscribe();
-  }
+  ngOnDestroy() { }
 
   getIsAuth() {
     return this.authService.getIsAuth();

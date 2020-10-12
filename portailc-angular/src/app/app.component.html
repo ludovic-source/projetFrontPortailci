@@ -1,26 +1,6 @@
 <div class="page">
   <app-header></app-header>
   <div class="content">
-    <!-- <nav *ngIf="getIsAuth() === true && getIsModeParametrage() === false">
-      <div class="menu" *ngFor="let theme of themes" routerLinkActive="active">
-        <a class="menu_options" routerLink="theme/{{ theme.id }}">
-          <div *ngIf="getImage(theme.id) != null && getImage(theme.id) != ''">
-            <img class="picto" src="{{ getImage(theme.id) }}">
-          </div>
-          <h3 title="{{ theme.description }}">{{ theme.nom }}</h3>
-        </a>
-      </div>
-      <div class="menu" *ngIf="indicateursEdition.isModeEdition === true">
-        <button routerLink="edition" (click)="editerThematique(1)" class="bouton_edition">
-          <img src="/assets/images/T16px.png" alt="édition thématique niveau thème"
-            title="ajouter, modifier, supprimer un thème ">
-        </button>
-        <button routerLink="edition" (click)="editerLien(1)" class="bouton_edition">
-          <img src="/assets/images/L16px.png" alt="édition lien niveau thème"
-            title="ajouter, modifier, supprimer un lien de niveau thème">
-        </button>
-      </div>
-    </nav> -->
 
     <section>
       <router-outlet></router-outlet>
