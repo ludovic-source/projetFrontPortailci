@@ -1,4 +1,4 @@
-<div>
+<div class='mt-3'>
   <table>
     <caption>Liste des profils actuels et les droits associés</caption>
     <tr>
@@ -21,11 +21,11 @@
 <div id="bloc_modification_parametrage">
   <div class="bloc_modification_parametrage_choix">
     <p>Quel type de modification souhaitez-vous ?</p>
-    <input type="radio" value="create" name="type_modification"
+    <input class="form-check-input" type="radio" value="create" name="type_modification"
            (change)="setTypeModification('create')"/>Créer un nouveau profil<br />
-    <input type="radio" value="update" name="type_modification"
+    <input class="form-check-input" type="radio" value="update" name="type_modification"
            (change)="setTypeModification('update')"/>Modifier un profil existant<br />
-    <input type="radio" value="delete" name="type_modification"
+    <input class="form-check-input" type="radio" value="delete" name="type_modification"
            (change)="setTypeModification('delete')"/>Supprimer un profil existant<br /><br />
   </div>
 
@@ -35,17 +35,17 @@
 
     <form (ngSubmit)="createProfil(f)" #f="ngForm">
       <p>
-        <em>Complétez les champs obligatoires : </em><br /><br />
+        <em>Complétez les champs obligatoires : </em><br />
         <label for="nom">nom court : </label>
-        <input type="text" id="nom" name="nom" ngModel required><br /><br />
+        <input type="text" id="nom" name="nom" ngModel required><br />
         <label for="description"> description : </label>
-        <input type="text" id="description" name="description" ngModel required><br /><br />
-        <em>Cochez les droits associés au profil : </em><br /><br />
+        <input type="text" id="description" name="description" ngModel required><br />
+        <em>Cochez les droits associés au profil : </em><br />
         <ng-container *ngFor="let droit of allDroits">
           <input type="checkbox" name="{{ droit.nom }}" id="{{ droit.nom }}" ngModel/>
           <label for="{{ droit.nom }}">{{ droit.nom }}</label><br />
         </ng-container>
-        <br /><br />
+        <br />
 
         <button class="bouton_bleu" type="submit" [disabled]="f.invalid">Créer profil</button>
       </p>
@@ -68,13 +68,13 @@
       </p>
       <p *ngIf="indicateurProfil === true">
         <label for="nom_update">nom court : </label>
-        <input type="text" id="nom_update" name="nom" ngModel="{{ profil.nom }}" required><br /><br />
+        <input type="text" id="nom_update" name="nom" ngModel="{{ profil.nom }}" required><br />
         <label for="description_update"> description : </label>
         <input type="text" id="description_update" name="description"
-               ngModel="{{ profil.description }}" required><br /><br />
+               ngModel="{{ profil.description }}" required><br />
         <em>Cochez les droits associés au profil : </em><br />
         <ng-container *ngFor="let droit of allDroits">
-          <input type="checkbox" name="{{ droit.nom }}" id="update_{{ droit.nom }}" ngModel/>
+          <input class="form-check-input" type="checkbox" name="{{ droit.nom }}" id="update_{{ droit.nom }}" ngModel/>
           <label for="update_{{ droit.nom }}">{{ droit.nom }}</label><br />
         </ng-container>
         <br />

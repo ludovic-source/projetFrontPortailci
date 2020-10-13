@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SectionParametrageComponent implements OnInit {
 
-  typeParametrage = '';
+  typeParametrage = 'utilisateur';
 
   constructor() {}
 
