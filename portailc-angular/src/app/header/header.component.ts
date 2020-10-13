@@ -86,6 +86,15 @@ export class HeaderComponent implements OnInit {
     this.router.navigate(['/admin']);
   }
   toWelcomePage() {
+    this.editionService.desactiverModeEdition();
     this.router.navigate(['/navigation']);
+  }
+
+  isInWelcomePage() {
+    if (this.router.url.endsWith('/navigation')) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

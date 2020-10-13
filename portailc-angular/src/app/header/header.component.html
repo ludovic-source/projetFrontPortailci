@@ -2,38 +2,52 @@
   Portail de l'automobile
 </div>
 
-
+<!-- Barre de navigation -->
 <div class="col-xs-6 navigation">
 
   <ul *ngIf="getIsAuth() === true" class="nav navbar-nav flex">
+<!-- Message de bienvenue -->
     <li>Bienvenue {{ getUsername() }} !</li>
-    <li>
-      <a (click)="toWelcomePage()">
+<!-- Bouton permettant à l'admin de revenir à l'accueil -->
+    <li *ngIf="controleDroitUser('Administration') === true && isInWelcomePage() == false">
+      <a (click)="toWelcomePage()" title="Accueil">
         <i class="fas fa-home"></i>
       </a>
     </li>
+<!-- Bouton Contactez-nous -->
     <li>
-      <a href="mailto:adeterminer@portailci.com">
+      <a href="mailto:adeterminer@portailci.com" title="Contactez-nous">
       <i class="fas fa-envelope"></i>
       </a>
     </li>
+<!-- Bouton pour passer en mode édition -->
     <li class="active" *ngIf="getIsEditable() == true
+    && indicateursEdition.isModeEdition != true
     && ( controleDroitUser('Modification') === true
          || controleDroitUser('Création') === true
          || controleDroitUser('Suppression') === true)">
-      <a *ngIf="indicateursEdition.isModeEdition != true" (click)="activerModeEdition()">
+      <a (click)="activerModeEdition()" title="Passer en mode édition">
         <i class="fas fa-edit"></i>
       </a>
+    </li>
+<!-- Bouton pour quitter le mode édition -->
+<li class="active" *ngIf="getIsEditable() == true
+    && indicateursEdition.isModeEdition != true
+    && ( controleDroitUser('Modification') === true
+         || controleDroitUser('Création') === true
+         || controleDroitUser('Suppression') === true)">
       <a *ngIf="indicateursEdition.isModeEdition === true" (click)="desactiverModeEdition()">
         <i class="far fa-edit"></i>
       </a>
     </li>
-    <li class="active" *ngIf="controleDroitUser('Administration') === true">
+<!-- Bouton d'accès au panneau d'administration -->
+<li class="active" *ngIf="controleDroitUser('Administration') === true" title="Administration">
       <a (click)="onAdmin()">
         <i class="fas fa-cogs"></i>
       </a>
     </li>
-    <li class="active">
+<!-- Botuon de déconnexion -->
+<li class="active" title="Se déconnecter">
       <a (click)="onSignOut()">
         <i class="fas fa-sign-out-alt"></i>
       </a>
