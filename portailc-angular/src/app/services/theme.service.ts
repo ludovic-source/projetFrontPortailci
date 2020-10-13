@@ -291,37 +291,61 @@ export class ThemeService {
   }
 
   deleteThematique(thematique: Thematique) {
-    var idThematique = thematique.id;
-    console.log('id thématique à supprimer: ' + idThematique);
-    let options = {
-      withCredentials: true
-    };
-    // Supprimer une thematique
-    this.httpClient
-      .delete(this.url + 'delete/' + idThematique, options)
-      .subscribe(
-        () => {
-          console.log('suppression thematique OK');
-          alert('thématique ' + thematique.nom + ' supprimée');
-          // supprimer la thématique qsi niveau 1 dans la liste en cours
-          if (thematique.niveau == 1) {
-            var index = 0;
-            var indexRecherche: number;
-            for (let theme of this.themes) {
-              if (theme.id == idThematique) {
-                indexRecherche = index;
-              }
-              index = index + 1;
-            }
-            this.themes.splice(indexRecherche, 1);
-            this.emitThemesSubject();
-          }
-        },
-        (error) => {
-          alert('thématique non supprimée');
-          console.log('Erreur ! : ' + error);
-        }
-      );
+      var idThematique = thematique.id;
+      console.log('id thématique à supprimer: ' + idThematique);
+      let options = {
+                   withCredentials: true
+      };
+      // Supprimer une thematique
+      this.httpClient
+           .delete(this.url + 'delete/' + idThematique, options)
+           .subscribe(
+               () => {
+                    console.log('suppression thematique OK');
+                    alert('thématique ' + thematique.nom + ' supprimée');
+                    // supprimer la thématique qsi niveau 1 dans la liste en cours
+                    if (thematique.niveau == 1) {
+                        var index = 0;
+                        var indexRecherche: number;
+                        for (let theme of this.themes) {
+                            if (theme.id == idThematique) {
+                                indexRecherche = index;
+                            }
+                            index = index + 1;
+                        }
+                        this.themes.splice(indexRecherche, 1);
+                        this.emitThemesSubject();
+                    }
+                    if (thematique.niveau == 2) {
+                      var index = 0;
+                      var indexRecherche: number;
+                      for (let theme of this.themes) {
+                          if (theme.id == idThematique) {
+                              indexRecherche = index;
+                          }
+                          index = index + 1;
+                      }
+                      this.themesNiveau2.splice(indexRecherche, 1);
+                      this.emitThemesNiveau2Subject();
+                    }
+                    if (thematique.niveau == 3) {
+                      var index = 0;
+                      var indexRecherche: number;
+                      for (let theme of this.themes) {
+                          if (theme.id == idThematique) {
+                              indexRecherche = index;
+                          }
+                          index = index + 1;
+                      }
+                      this.themesNiveau3.splice(indexRecherche, 1);
+                      this.emitThemesNiveau3Subject();
+                    }
+               },
+               (error) => {
+                    alert('thématique non supprimée');
+                    console.log('Erreur ! : ' + error);
+               }
+           );
   }
 
   updateThematique(thematique: Thematique): any {

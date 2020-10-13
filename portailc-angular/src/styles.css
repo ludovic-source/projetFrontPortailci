@@ -245,12 +245,14 @@ nav
   background-color: rgba(255, 255, 255, 0);
   border: 0px;
 }
+*/
 
 #section_theme
 {
 	display: flex;
 	flex-direction: row;
-	justify-content: space-between;
+  justify-content: space-between;
+  background-color: rgba(128,128,128,0.3);
 }
 
 #bloc_theme
@@ -258,7 +260,7 @@ nav
 	min-height : 500px;
 	margin-left: 5px;
 	margin-right: 5px;
-	background-color: rgba(200,200,200,0.3);
+	/*background-color: rgba(200,200,200,0.3);*/
 	display: flex;
 	justify-content: flex-start;
 	flex-wrap: wrap;
@@ -276,19 +278,19 @@ nav
 	justify-content: flex-start;
 	align-content: flex-start;
 	flex-direction: column;
-	flex-wrap: wrap;
+  flex-wrap: wrap;
 }
 
 .bloc_sous_theme h4
 {
-	text-decoration: underline;
+	/*text-decoration: underline;*/
 	height: 16px
 }
 
 .bloc_sous_sous_theme
 {
 	margin: 0px 5px 5px 0px;
-	display: flex;
+  display: flex;
 }
 
 .bloc_sous_sous_theme h4
@@ -313,15 +315,20 @@ nav
 
 .bloc_lien
 {
-	color : grey;
+  color : grey;
 }
 
+.groupe_lien
+{
+  box-shadow: inset 0px 0px 20px 2px rgb(250, 250, 250,0.8);
+}
 .bloc_lien h4
 {
 	text-decoration: none;
 	color: black;
 }
 
+/*
 #bloc_form_connexion h1
 {
 	text-align: center;
@@ -420,7 +427,7 @@ nav
   border-width: 0px;
   border-radius: 5px;
 }
-
+*/
 .bouton_edition
 {
   heigth: 20px;
@@ -428,7 +435,7 @@ nav
   border: 0px black solid;
   margin: 0px 5px 5px 0px;
 }
-
+/*
 td, th
 {
 	border : 1px solid black;
