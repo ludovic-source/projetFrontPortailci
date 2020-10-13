@@ -29,11 +29,13 @@ import { SectionParametrageProfilComponent } from './section-parametrage-profil/
 import { SectionParametrageUtilisateurComponent } from './section-parametrage-utilisateur/section-parametrage-utilisateur.component';
 import { HeaderComponent } from './header/header.component';
 import { PrimeNgModule } from './shared/prime-ng/prime-ng.module';
+import { AdminGuard } from './services/admin.guard';
 
 const appRoutes: Routes = [
 
   {
     path: 'admin',
+    canActivate: [AdminGuard],
     loadChildren: () => import('./admin-panel/admin-panel.module')
                         .then(module => module.AdminPanelModule)
   },
@@ -76,6 +78,7 @@ const appRoutes: Routes = [
     PrimeNgModule
   ],
   providers: [
+    AdminGuard,
     AuthGuard,
     AuthService,
     ThemeService,
