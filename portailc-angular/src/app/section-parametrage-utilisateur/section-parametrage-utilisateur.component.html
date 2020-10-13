@@ -1,13 +1,13 @@
-<div id="bloc_modification_parametrage">
+<div id="bloc_modification_parametrage w-50">
   <div class="bloc_modification_parametrage_choix">
     <p>Quel type de modification souhaitez-vous ?</p>
-    <input type="radio" value="create" name="type_modification"
+    <input class="form-check-input" type="radio" value="create" name="type_modification"
            (change)="setTypeModification('create')"/>Créer un nouvel utilisateur<br />
-    <input type="radio" value="update" name="type_modification"
+    <input class="form-check-input" type="radio" value="update" name="type_modification"
            (change)="setTypeModification('updateProfil')"/>Modifier le profil d'un utilisateur<br />
-    <input type="radio" value="update" name="type_modification"
+    <input class="form-check-input" type="radio" value="update" name="type_modification"
            (change)="setTypeModification('updatePassword')"/>Modifier le mot de passe d'un utilisateur<br />
-    <input type="radio" value="delete" name="type_modification"
+    <input class="form-check-input" type="radio" value="delete" name="type_modification"
            (change)="setTypeModification('delete')"/>Supprimer un utilisateur existant<br /><br />
   </div>
 

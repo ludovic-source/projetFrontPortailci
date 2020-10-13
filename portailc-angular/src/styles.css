@@ -27,10 +27,11 @@ a:visited
 header
 {
 	/*border : 0.5px solid black; */
-	height: 90px;
+	height: 60px;
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
+	background-color: rgba(32, 46, 245, 0.918);
 }
 
 #bloc_contact
@@ -66,7 +67,7 @@ nav
 	flex-direction: row;
 	justify-content: space-around;
 	align-items: center;
-	height: 60px;
+	height: 45px;
 }
 
 .menu_options
@@ -80,11 +81,6 @@ nav
   background-color: rgba(255, 255, 255, 0);
   border: 0px;
 }
-
-/*.menu_actif
-{
-	border-bottom: 3px solid black;
-}*/
 
 #section_theme
 {
@@ -121,10 +117,9 @@ nav
 	flex-wrap: wrap;
 }
 
-.bloc_sous_theme h4
+.bloc_sous_theme h5
 {
 	text-decoration: underline;
-	height: 16px
 }
 
 .bloc_sous_sous_theme
@@ -134,9 +129,9 @@ nav
 	display: flex;
 }
 
-.bloc_sous_sous_theme h4
+.bloc_sous_sous_theme h5
 {
-	height: 12px;
+	
 }
 
 .bloc_titre
@@ -161,7 +156,12 @@ nav
 	color : grey;
 }
 
-.bloc_lien h4
+.bloc_lien p
+{
+	color : grey;
+}
+
+.bloc_lien h5
 {
 	text-decoration: none;
 	color: black;
@@ -176,7 +176,7 @@ nav
 #bloc_module_edition
 {
   /*border: 0.5px double grey;*/
-  min-width: 400px;
+  	min-width: 400px;
 	padding-left: 20px;
 	padding-right: 20px;
 }
@@ -196,16 +196,6 @@ nav
 {
   display: flex;
   justify-content: space-around;
-}
-
-#bloc_menu_parametrage
-{
-  /*text-align: center;*/
-}
-
-.menu_parametrage
-{
-
 }
 
 .bouton_gris_clair
@@ -278,7 +268,7 @@ nav
 
 .bouton_edition
 {
-  heigth: 20px;
+  height: 20px;
   width: 20px;
   border: 0px black solid;
   margin: 0px 5px 5px 0px;

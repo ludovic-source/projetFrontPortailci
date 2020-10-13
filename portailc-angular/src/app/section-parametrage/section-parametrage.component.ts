@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-//import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-section-parametrage',
@@ -10,10 +9,9 @@ export class SectionParametrageComponent implements OnInit {
 
   typeParametrage = '';
 
-  //constructor(private route: ActivatedRoute) { }
   constructor() {}
 
-  ngOnInit(): void {
+  ngOnInit(): void {   
   }
 
   setTypeParametrage(typeParametrage: string) {

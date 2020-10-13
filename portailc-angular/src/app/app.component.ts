@@ -103,6 +103,13 @@ export class AppComponent implements OnInit, OnDestroy {
       this.editionService.setLieuEditionLien(lieuEdition);
    }
 
+   allerPageAccueil() {
+      this.isModeParametrage = false;
+      this.editionService.revenirDebutFormulaire();
+      this.editionService.desactiverModeEdition();
+      this.router.navigate(['theme']);
+   }
+
    getImage(idTheme: number) {
       return window.localStorage.getItem('' + idTheme);  // pour récupérer la vraie image du back-end
       // ci-dessous, juste pour les tests en attendant la mise en place du getImage()

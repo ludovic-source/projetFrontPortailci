@@ -1,26 +1,26 @@
 <!-- Formulaires pour les liens -->
 
-<div class="bloc_module_edition_choix" *ngIf="indicateursEdition.typeObjet === 'lien'">
+<div class="bloc_module_edition_choix ml-3" *ngIf="indicateursEdition.typeObjet === 'lien'">
   <ng-container *ngIf="indicateursEdition.lieuEdition === 1 || indicateursEdition.lieuEdition === 3
                        || indicateursEdition.lieuEdition === 5">
     <p>Quel type de modification souhaitez-vous ?</p>
-    <input type="radio" value="create" name="type_modification"
+    <input class="form-check-input" type="radio" value="create" name="type_modification"
            (change)="setTypeModification('create')"/>Créer un nouveau lien<br />
-    <input type="radio" value="update" name="type_modification"
+    <input class="form-check-input" type="radio" value="update" name="type_modification"
            (change)="setTypeModification('update')"/>Modifier un lien existant<br />
-    <input type="radio" value="publier" name="type_modification"
+    <input class="form-check-input" type="radio" value="publier" name="type_modification"
            (change)="setTypeModification('publier')"/>Publier un lien existant<br />
-    <input type="radio" value="delete" name="type_modification"
+    <input class="form-check-input" type="radio" value="delete" name="type_modification"
            (change)="setTypeModification('delete')"/>Dépublier un lien existant<br />
   </ng-container>
   <ng-container *ngIf="indicateursEdition.lieuEdition === 2 || indicateursEdition.lieuEdition === 4
                       || indicateursEdition.lieuEdition === 6">
     <p>Quel type de modification souhaitez-vous ?</p>
-    <input type="radio" value="update" name="type_modification"
+    <input class="form-check-input" type="radio" value="update" name="type_modification"
            (change)="setTypeModification('update')"/>Modifier un lien existant<br />
-    <input type="radio" value="publier" name="type_modification"
+    <input class="form-check-input" type="radio" value="publier" name="type_modification"
            (change)="setTypeModification('publier')"/>Publier un lien existant<br />
-    <input type="radio" value="delete" name="type_modification"
+    <input class="form-check-input" type="radio" value="delete" name="type_modification"
            (change)="setTypeModification('delete')"/>Dépublier un lien existant<br />
   </ng-container>
 </div>

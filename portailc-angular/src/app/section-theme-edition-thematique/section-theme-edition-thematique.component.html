@@ -1,38 +1,38 @@
 <!-- Formulaires pour les thématiques -->
 
-<div class="bloc_module_edition_choix" *ngIf="indicateursEdition.typeObjet==='thematique'">
+<div class="bloc_module_edition_choix ml-3" *ngIf="indicateursEdition.typeObjet==='thematique'">
   <ng-container *ngIf="indicateursEdition.niveauThematique === 1">
     <p>Quel type de modification souhaitez-vous ?</p>
-    <input type="radio" value="create" name="type_modification"
+    <input class="form-check-input" type="radio" value="create" name="type_modification"
            (change)="setTypeModification('create')"/>Créer un nouveau thème<br />
-    <input type="radio" value="update" name="type_modification"
+    <input class="form-check-input" type="radio" value="update" name="type_modification"
            (change)="setTypeModification('update')"/>Modifier un thème existant<br />
-    <input type="radio" value="delete" name="type_modification"
+    <input class="form-check-input" type="radio" value="delete" name="type_modification"
            (change)="setTypeModification('delete')"/>Supprimer un thème existant<br />
-    <input type="radio" value="upload" name="type_modification"
+    <input class="form-check-input" type="radio" value="upload" name="type_modification"
            (change)="setTypeModification('upload')"/>Ajouter ou modifier l'image de fond d'un thème<br />
   </ng-container>
   <ng-container *ngIf="indicateursEdition.niveauThematique === 2">
     <p>Quel type de modification souhaitez-vous ?</p>
-    <input type="radio" value="create" name="type_modification"
+    <input class="form-check-input" type="radio" value="create" name="type_modification"
            (change)="setTypeModification('create')"/>Créer un nouveau sous-thème<br />
-    <input type="radio" value="update" name="type_modification"
+    <input class="form-check-input" type="radio" value="update" name="type_modification"
            (change)="setTypeModification('update')"/>Modifier un sous-thème existant<br />
-    <input type="radio" value="delete" name="type_modification"
+    <input class="form-check-input" type="radio" value="delete" name="type_modification"
            (change)="setTypeModification('delete')"/>Supprimer un sous-thème existant<br />
   </ng-container>
   <ng-container *ngIf="indicateursEdition.niveauThematique === 3">
     <p>Quel type de modification souhaitez-vous ?</p>
-    <input type="radio" value="create" name="type_modification"
+    <input class="form-check-input" type="radio" value="create" name="type_modification"
            (change)="setTypeModification('create')"/>Créer un nouveau sous sous-thème<br />
-    <input type="radio" value="update" name="type_modification"
+    <input class="form-check-input" type="radio" value="update" name="type_modification"
            (change)="setTypeModification('update')"/>Modifier un sous-thème existant<br />
-    <input type="radio" value="delete" name="type_modification"
+    <input class="form-check-input" type="radio" value="delete" name="type_modification"
            (change)="setTypeModification('delete')"/>Supprimer un sous sous-thème existant<br />
   </ng-container>
   <ng-container *ngIf="indicateursEdition.niveauThematique === 4">
     <p>Quel type de modification souhaitez-vous ?</p>
-    <input type="radio" value="update" name="type_modification"
+    <input class="form-check-input" type="radio" value="update" name="type_modification"
            (change)="setTypeModification('update')"/>Modifier un sous sous-thème existant<br />
   </ng-container>
 </div>

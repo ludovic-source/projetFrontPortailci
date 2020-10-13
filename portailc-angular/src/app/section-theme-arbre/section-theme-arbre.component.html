@@ -66,13 +66,13 @@
                 *ngIf="themeNiveau2.niveau == 2"
                 title="{{ themeNiveau2.description }}"
                 (click)="getThemesNiveau3EtLiens(themeNiveau2.id)">
-          <h4> {{ themeNiveau2.nom }} </h4>
+          <h5> {{ themeNiveau2.nom }} </h5>
         </a>
 
       </div>
       <div class="bloc_lien" *ngFor="let lienNiveau2 of liensNiveau2">
         <ng-container *ngIf="indicateursEdition.isModeEdition != true">
-          <p *ngIf="lienNiveau2.thematique.id == themeNiveau2.id
+          <p class="ml-2" *ngIf="lienNiveau2.thematique.id == themeNiveau2.id
                     && lienNiveau2.statut == 'publié'">
             <a *ngIf="lienNiveau2.mode_affichage == false"
                href="{{ lienNiveau2.url }}"
@@ -91,7 +91,7 @@
                    alt="modifier le lien"
                    title="modifier le lien">
             </button>
-            <a *ngIf="lienNiveau2.mode_affichage == false"
+            <a class="ml-2" *ngIf="lienNiveau2.mode_affichage == false"
                href="{{ lienNiveau2.url }}"
                title="{{ lienNiveau2.description }}"
                target="_blank"> {{ lienNiveau2.nom }}</a>
@@ -126,12 +126,12 @@
                     *ngIf="themeNiveau3.niveau == 3 && themeNiveau2.id == themeNiveau3.idParent"
                     title="{{ themeNiveau2.description }}"
                     (click)="getLiens(themeNiveau3.id)">
-              <h4> {{ themeNiveau3.nom }}</h4>
+              <h5> {{ themeNiveau3.nom }}</h5>
             </a>
           </div>
           <div *ngFor="let lien of liens">
             <ng-container *ngIf="indicateursEdition.isModeEdition != true">
-              <p *ngIf="lien.thematique.id == themeNiveau3.id
+              <p class="ml-2" *ngIf="lien.thematique.id == themeNiveau3.id
                         && themeNiveau2.id == themeNiveau3.idParent
                         && lien.statut == 'publié'">
                 <a *ngIf="lien.mode_affichage == false"
@@ -144,7 +144,7 @@
               </p>
             </ng-container>
             <ng-container *ngIf="indicateursEdition.isModeEdition === true">
-              <p *ngIf="lien.thematique.id == themeNiveau3.id
+              <p class="ml-2" *ngIf="lien.thematique.id == themeNiveau3.id
                         && themeNiveau2.id == themeNiveau3.idParent">
                 <button (click)="editerLien(6)"
                         class="bouton_edition">
