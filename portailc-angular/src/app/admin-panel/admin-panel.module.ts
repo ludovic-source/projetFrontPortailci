@@ -12,6 +12,7 @@ import { ToastModule } from 'primeng/toast';
 import { InputTextModule } from 'primeng/inputtext';
 import { AdminUsersComponent } from './admin-users/admin-users.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { DropdownModule } from 'primeng/dropdown';
 
 
 
@@ -34,7 +35,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     ConfirmDialogModule,
     ToolbarModule,
     ToastModule,
-    InputTextModule
+    InputTextModule,
+    DropdownModule
 
   ],
   exports: [

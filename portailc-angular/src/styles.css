@@ -132,7 +132,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 } */
 .right {
   display: flex;
-  align-content: end;
+  align-content: flex-end;
 }
 form > .btnsubmit {
   display: flex;
