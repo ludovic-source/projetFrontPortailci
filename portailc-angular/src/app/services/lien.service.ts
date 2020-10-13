@@ -97,12 +97,33 @@ export class LienService {
                            withCredentials: true
         };
         // Créer un lien
+        alert("en rentrant dans createLien --> taille liens = " + this.liens.length);
+        alert("en rentrant dans createLien --> taille liensNiveau1 = " + this.liensNiveau1.length);
+        alert("en rentrant dans createLien --> taille liensNiveau2 = " + this.liensNiveau2.length);
         this.httpClient
              .post<any>(this.url + 'create', lien, options)
              .subscribe(
                   (response) => {
                       console.log('création lien OK');
                       alert('lien ' + response.nom + ' créé');
+                      if(lien.thematique.niveau == 1) {
+                          alert("avant = " + this.liens.length);
+                        this.liens.push(response);
+                        alert("après = " + this.liens.length);
+                        this.emitLiensSubject();
+                      } else {
+                          if(lien.thematique.niveau == 2) {
+                            alert("avant = " + this.liensNiveau1.length);
+                            this.liensNiveau1.push(response);
+                            alert("après = " + this.liensNiveau1.length);
+                            this.emitLiensNiveau1Subject();
+                          } else { // lien de niveau 3
+                            alert("avant = " + this.liensNiveau2.length);
+                            this.liensNiveau2.push(response);
+                            alert("après = " + this.liensNiveau2.length);
+                            this.emitLiensNiveau2Subject();
+                          }
+                      }
                       return response;
                   },
                   (error) => {
@@ -123,6 +144,15 @@ export class LienService {
                   (response) => {
                       console.log('publication lien OK');
                       alert('lien ' + response.nom + ' publié');
+                      if(lien.thematique.niveau == 1) {
+                        this.emitLiensSubject();
+                      } else {
+                          if(lien.thematique.niveau == 2) {
+                            this.emitLiensNiveau1Subject();
+                          } else {
+                            this.emitLiensNiveau2Subject();
+                          }
+                      }
                       return response;
                   },
                   (error) => {
@@ -143,6 +173,42 @@ export class LienService {
                   (response) => {
                       console.log('dépublication lien OK');
                       alert('lien ' + response.nom + ' dépublié');
+                      if(lien.thematique.niveau == 1) {
+                        var index = 0;
+                        var indexRecherche: number;
+                        for (let lienASupprimer of this.liens) {
+                          if (lienASupprimer.id == lien.id) {
+                              indexRecherche = index;
+                          }
+                          index = index + 1;
+                        }
+                        this.liens.splice(indexRecherche, 1);
+                        this.emitLiensSubject();
+                      } else {
+                          if(lien.thematique.niveau == 2) {
+                            var index = 0;
+                            var indexRecherche: number;
+                            for (let lienASupprimer of this.liensNiveau1) {
+                              if (lienASupprimer.id == lien.id) {
+                                  indexRecherche = index;
+                              }
+                              index = index + 1;
+                            }
+                            this.liensNiveau1.splice(indexRecherche, 1);
+                            this.emitLiensNiveau1Subject();
+                          } else {
+                            var index = 0;
+                            var indexRecherche: number;
+                            for (let lienASupprimer of this.liensNiveau2) {
+                              if (lienASupprimer.id == lien.id) {
+                                  indexRecherche = index;
+                              }
+                              index = index + 1;
+                            }
+                            this.liensNiveau2.splice(indexRecherche, 1);
+                            this.emitLiensNiveau2Subject();
+                          }
+                      }
                       return response;
                   },
                   (error) => {
@@ -163,6 +229,15 @@ export class LienService {
                   (response) => {
                       console.log('modification lien OK');
                       alert('lien ' + response.nom + ' modifié');
+                      if(lien.thematique.niveau == 1) {
+                        this.emitLiensSubject();
+                      } else {
+                          if(lien.thematique.niveau == 2) {
+                            this.emitLiensNiveau1Subject();
+                          } else {
+                            this.emitLiensNiveau2Subject();
+                          }
+                      }
                       return response;
                   },
                   (error) => {

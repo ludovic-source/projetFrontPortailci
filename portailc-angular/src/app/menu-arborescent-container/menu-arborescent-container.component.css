@@ -1,6 +1,8 @@
 .picto {
   max-height: 30px;
   max-width: 30px;
+  margin-top: 20px;
+  margin-bottom: 10px;
 }
 
 nav

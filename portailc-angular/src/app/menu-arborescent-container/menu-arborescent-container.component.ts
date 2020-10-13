@@ -31,12 +31,12 @@ export class MenuArborescentContainerComponent implements OnInit {
       (indicateursEdition: any) => {
         this.indicateursEdition = indicateursEdition;
       });
-    this.editionService.emitIndicateursEditionSubject();
+    /*this.editionService.emitIndicateursEditionSubject();
     this.userSubscription = this.authService.userSubject.subscribe(
       (user: any) => {
         this.user = user;
       });
-    this.authService.emitUserSubject();
+    this.authService.emitUserSubject();*/
     this.themesSubscription = this.themeService.themesSubject.subscribe(
       (themes: any[]) => {
         this.themes = themes;

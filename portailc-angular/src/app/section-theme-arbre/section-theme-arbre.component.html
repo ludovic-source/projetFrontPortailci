@@ -12,6 +12,7 @@
              alt="ajouter, modifier, supprimer un sous-thème"
              title="ajouter, modifier, supprimer un sous-thème">
       </button>
+      <div class="groupe_lien">
       <div class="bloc_lien" *ngFor="let lienNiveau1 of liensNiveau1">
         <ng-container *ngIf="indicateursEdition.isModeEdition != true">
           <p *ngIf="lienNiveau1.thematique.id == getIdTheme()
@@ -44,6 +45,7 @@
           </p>
         </ng-container>
       </div>
+      </div>
     </div>
 
     <div class="bloc_sous_theme" *ngFor="let themeNiveau2 of themesNiveau2">
@@ -66,10 +68,11 @@
                 *ngIf="themeNiveau2.niveau == 2"
                 title="{{ themeNiveau2.description }}"
                 (click)="getThemesNiveau3EtLiens(themeNiveau2.id)">
-          <h4> {{ themeNiveau2.nom }} </h4>
+          <h4> <i class="fa fa-caret-right" aria-hidden="true"></i> {{ themeNiveau2.nom }} </h4>
         </a>
 
       </div>
+      <div class="groupe_lien">
       <div class="bloc_lien" *ngFor="let lienNiveau2 of liensNiveau2">
         <ng-container *ngIf="indicateursEdition.isModeEdition != true">
           <p *ngIf="lienNiveau2.thematique.id == themeNiveau2.id
@@ -102,6 +105,7 @@
           </p>
         </ng-container>
       </div>
+      </div>
 
       <div class="bloc_sous_sous_theme" *ngFor="let themeNiveau3 of themesNiveau3">
         <div class="bloc_lien">
@@ -126,9 +130,10 @@
                     *ngIf="themeNiveau3.niveau == 3 && themeNiveau2.id == themeNiveau3.idParent"
                     title="{{ themeNiveau2.description }}"
                     (click)="getLiens(themeNiveau3.id)">
-              <h4> {{ themeNiveau3.nom }}</h4>
+              <h4> <i class="fa fa-caret-right" aria-hidden="true"></i> {{ themeNiveau3.nom }} </h4>
             </a>
           </div>
+          <div class="groupe_lien">
           <div *ngFor="let lien of liens">
             <ng-container *ngIf="indicateursEdition.isModeEdition != true">
               <p *ngIf="lien.thematique.id == themeNiveau3.id
@@ -163,6 +168,7 @@
               </p>
             </ng-container>
           </div>
+        </div>
         </div>
       </div>
     </div>
