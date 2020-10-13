@@ -103,7 +103,6 @@ export class UtilisateurService {
       .toPromise()
       .then(
         (response: any) => {
-          console.log(response);
           this._collaborateurSubject.next(response);
         });
   }
@@ -236,7 +235,7 @@ export class UtilisateurService {
   }
 
   mapToUtilisateur(user: User): Utilisateur {
-    let utilisateur: Utilisateur;
+    let utilisateur = new Utilisateur();
     utilisateur.id = user.id;
     utilisateur.nom = user.nom;
     utilisateur.prenom = user.prenom;

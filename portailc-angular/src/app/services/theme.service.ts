@@ -8,7 +8,7 @@ import { switchMap, map, tap } from 'rxjs/operators';
 @Injectable()
 export class ThemeService {
 
-  idThemeEnCours : number;
+  idThemeEnCours: number;
 
   allThematiquesSubject = new Subject<any[]>();
   private allThematiques: any[];
@@ -74,41 +74,49 @@ export class ThemeService {
   }
 
   emitThemesSubject() {
-       this.themesSubject.next(this.themes);
+    this.themesSubject.next(this.themes);
   }
 
   emitThemesNiveau2Subject() {
-      this.themesNiveau2Subject.next(this.themesNiveau2);
+    this.themesNiveau2Subject.next(this.themesNiveau2);
   }
 
   emitThemesNiveau3Subject() {
-      this.themesNiveau3Subject.next(this.themesNiveau3);
+    this.themesNiveau3Subject.next(this.themesNiveau3);
   }
 
   emitAllThematiquesSubject() {
-      this.allThematiquesSubject.next(this.allThematiques);
+    this.allThematiquesSubject.next(this.allThematiques);
   }
 
   getImageTheme() {
-      for (let theme of this.themes) {
-          console.log('recherche image thème :' + theme.id);
-          if (theme.imagePath != "") {
-            this.getData(theme.id)
-                .subscribe(
-                    imgData => window.localStorage.setItem(theme.id, imgData),
-                    err => console.log('Erreur ! : ' + err)
-            );
-          }
+    for (let theme of this.themes) {
+      console.log('recherche image thème :' + theme.id);
+      if (theme.imagePath != "") {
+        console.log('on cherche l\'image du thème : ' + theme.id + ' chemin image = ' + theme.imagePath);
+        this.getData(theme.id)
+          .subscribe(
+
+            (imgData: any) => {
+              window.localStorage.setItem(theme.id, imgData);
+              console.log('on stocke l\'image dans le localstorage');
+            },
+            err => console.log('Erreur ! : ' + err)
+          );
+      } else {
+        console.log('pas d\image à rechercher pour le thème : ' + theme.id + ' chemin image = ' + theme.imagePath);
       }
+
+    }
   }
 
   getData(idTheme: number): Observable<string> {
-      return this.httpClient
-                     .get(this.url + 'image/id/' + idTheme,
-                        { responseType: 'blob', withCredentials: true})
-                     .pipe(
-                         switchMap(response => this.readFile(response))
-                     );
+    return this.httpClient
+      .get(this.url + 'image/id/' + idTheme,
+        { responseType: 'blob', withCredentials: true })
+      .pipe(
+        switchMap(response => this.readFile(response))
+      );
   }
 
   private readFile(blob: Blob): Observable<string> {
@@ -125,299 +133,299 @@ export class ThemeService {
   }
 
   initThemeNiveau3Subject() {
-      this.themesNiveau3.splice(0);
-      this.emitThemesNiveau3Subject();
+    this.themesNiveau3.splice(0);
+    this.emitThemesNiveau3Subject();
   }
 
   getThemes(idParent: number) {
     let options = {
-               withCredentials: true
+      withCredentials: true
     };
     this.httpClient
-              .get<any>(this.url + 'findenfants/' + idParent, options)
-              .subscribe(
-                (response) => {
-                  this.themes = response;
-                  console.log('récupération thèmes OK');
-                  this.trierThemesIdCroissant();
-                  this.emitThemesSubject();
-                  this.getImageTheme();
-                },
-                (error) => {
-                  console.log('Erreur ! : ' + error);
-                }
-              );
+      .get<any>(this.url + 'findenfants/' + idParent, options)
+      .subscribe(
+        (response) => {
+          this.themes = response;
+          console.log('récupération thèmes OK');
+          this.trierThemesIdCroissant();
+          this.emitThemesSubject();
+          this.getImageTheme();
+        },
+        (error) => {
+          console.log('Erreur ! : ' + error);
+        }
+      );
   }
 
-  getThemesNiveau2(idParent: number) : any[]{
-      let options = {
-                 withCredentials: true
-      };
-      this.httpClient
-                .get<any>(this.url + 'findenfants/' + idParent, options)
-                .subscribe(
-                  (response) => {
-                    this.themesNiveau2 = response;
-                    this.trierThemesNiveau2IdCroissant();
-                    this.emitThemesNiveau2Subject();
-                  },
-                  (error) => {
-                    console.log('Erreur ! : ' + error);
-                  }
-                );
-      return this.themesNiveau2;
+  getThemesNiveau2(idParent: number): any[] {
+    let options = {
+      withCredentials: true
+    };
+    this.httpClient
+      .get<any>(this.url + 'findenfants/' + idParent, options)
+      .subscribe(
+        (response) => {
+          this.themesNiveau2 = response;
+          this.trierThemesNiveau2IdCroissant();
+          this.emitThemesNiveau2Subject();
+        },
+        (error) => {
+          console.log('Erreur ! : ' + error);
+        }
+      );
+    return this.themesNiveau2;
   }
 
-  getThemesNiveau3(idParent: number) : any[]{
-       let options = {
-                   withCredentials: true
-       };
-       this.httpClient
-                  .get<any>(this.url + 'findenfants/' + idParent, options)
-                  .subscribe(
-                    (response) => {
-                      this.themesNiveau3 = response;
-                      this.trierThemesNiveau3IdCroissant();
-                      this.emitThemesNiveau3Subject();
-                    },
-                    (error) => {
-                      console.log('Erreur ! : ' + error);
-                    }
-                  );
-       return this.themesNiveau3;
-   }
+  getThemesNiveau3(idParent: number): any[] {
+    let options = {
+      withCredentials: true
+    };
+    this.httpClient
+      .get<any>(this.url + 'findenfants/' + idParent, options)
+      .subscribe(
+        (response) => {
+          this.themesNiveau3 = response;
+          this.trierThemesNiveau3IdCroissant();
+          this.emitThemesNiveau3Subject();
+        },
+        (error) => {
+          console.log('Erreur ! : ' + error);
+        }
+      );
+    return this.themesNiveau3;
+  }
 
   getAllThematiques(): any[] {
 
-       let options = {
-                   withCredentials: true
-       };
+    let options = {
+      withCredentials: true
+    };
 
-       // récupérer les thématiques de niveau 1 (thème)
-       this.httpClient
-            .get<any>(this.url + 'findenfants/' + 0, options)
-            .subscribe(
-                (response) => {
-                     this.allThematiques = response;
-                     for (let thematique of response) {
-                        this.getThematiquesNiveau2(thematique.id);
-                     }
-                     this.emitAllThematiquesSubject();
-                },
-                (error) => {
-                     console.log('Erreur ! : ' + error);
-                }
-            );
-       return this.allThematiques;
+    // récupérer les thématiques de niveau 1 (thème)
+    this.httpClient
+      .get<any>(this.url + 'findenfants/' + 0, options)
+      .subscribe(
+        (response) => {
+          this.allThematiques = response;
+          for (let thematique of response) {
+            this.getThematiquesNiveau2(thematique.id);
+          }
+          this.emitAllThematiquesSubject();
+        },
+        (error) => {
+          console.log('Erreur ! : ' + error);
+        }
+      );
+    return this.allThematiques;
   }
 
   getThematiquesNiveau2(idParent: number) {
-      let options = {
-                   withCredentials: true
-      };
-      // récupérer les thématiques de niveau 2 (sous-thèmes)
-      this.httpClient
-           .get<any>(this.url + 'findenfants/' + idParent, options)
-           .subscribe(
-               (response) => {
-                    for (let thematique of response) {
-                       this.allThematiques.push(thematique);
-                       this.getThematiquesNiveau3(thematique.id);
-                    }
-               },
-               (error) => {
-                    console.log('Erreur ! : ' + error);
-               }
-           );
+    let options = {
+      withCredentials: true
+    };
+    // récupérer les thématiques de niveau 2 (sous-thèmes)
+    this.httpClient
+      .get<any>(this.url + 'findenfants/' + idParent, options)
+      .subscribe(
+        (response) => {
+          for (let thematique of response) {
+            this.allThematiques.push(thematique);
+            this.getThematiquesNiveau3(thematique.id);
+          }
+        },
+        (error) => {
+          console.log('Erreur ! : ' + error);
+        }
+      );
   }
 
   getThematiquesNiveau3(idParent: number) {
-      let options = {
-                   withCredentials: true
-      };
-      // récupérer les thématiques de niveau 3 (sous sous-thèmes)
-      this.httpClient
-           .get<any>(this.url + 'findenfants/' + idParent, options)
-           .subscribe(
-               (response) => {
-                    for (let thematique of response) {
-                       this.allThematiques.push(thematique);
-                    }
-               },
-               (error) => {
-                    console.log('Erreur ! : ' + error);
-               }
-           );
+    let options = {
+      withCredentials: true
+    };
+    // récupérer les thématiques de niveau 3 (sous sous-thèmes)
+    this.httpClient
+      .get<any>(this.url + 'findenfants/' + idParent, options)
+      .subscribe(
+        (response) => {
+          for (let thematique of response) {
+            this.allThematiques.push(thematique);
+          }
+        },
+        (error) => {
+          console.log('Erreur ! : ' + error);
+        }
+      );
   }
 
   createThematique(thematique: Thematique): any {
-      let options = {
-                   withCredentials: true
-      };
-      // Créer une thematique
-      this.httpClient
-           .post<any>(this.url + 'create', thematique, options)
-           .subscribe(
-               (response) => {
-                    console.log('création thematique OK');
-                    alert('thématique ' + response.nom + ' créée');
-                    if (response.niveau == 1) {
-                        this.themes.push(response);
-                        this.emitThemesSubject();
-                    }
-                    if (response.niveau == 2) {
-                      this.themesNiveau2.push(response);
-                      this.emitThemesNiveau2Subject();
-                    }
-                    if (response.niveau == 3) {
-                      this.themesNiveau3.push(response);
-                      this.emitThemesNiveau3Subject();
-                    }
-                    return response;
-               },
-               (error) => {
-                    alert('thématique non créée');
-                    console.log('Erreur ! : ' + error);
-               }
-           );
+    let options = {
+      withCredentials: true
+    };
+    // Créer une thematique
+    this.httpClient
+      .post<any>(this.url + 'create', thematique, options)
+      .subscribe(
+        (response) => {
+          console.log('création thematique OK');
+          alert('thématique ' + response.nom + ' créée');
+          if (response.niveau == 1) {
+            this.themes.push(response);
+            this.emitThemesSubject();
+          }
+          if (response.niveau == 2) {
+            this.themesNiveau2.push(response);
+            this.emitThemesNiveau2Subject();
+          }
+          if (response.niveau == 3) {
+            this.themesNiveau3.push(response);
+            this.emitThemesNiveau3Subject();
+          }
+          return response;
+        },
+        (error) => {
+          alert('thématique non créée');
+          console.log('Erreur ! : ' + error);
+        }
+      );
   }
 
   deleteThematique(thematique: Thematique) {
-      var idThematique = thematique.id;
-      console.log('id thématique à supprimer: ' + idThematique);
-      let options = {
-                   withCredentials: true
-      };
-      // Supprimer une thematique
-      this.httpClient
-           .delete(this.url + 'delete/' + idThematique, options)
-           .subscribe(
-               () => {
-                    console.log('suppression thematique OK');
-                    alert('thématique ' + thematique.nom + ' supprimée');
-                    // supprimer la thématique qsi niveau 1 dans la liste en cours
-                    if (thematique.niveau == 1) {
-                        var index = 0;
-                        var indexRecherche: number;
-                        for (let theme of this.themes) {
-                            if (theme.id == idThematique) {
-                                indexRecherche = index;
-                            }
-                            index = index + 1;
-                        }
-                        this.themes.splice(indexRecherche, 1);
-                        this.emitThemesSubject();
-                    }
-               },
-               (error) => {
-                    alert('thématique non supprimée');
-                    console.log('Erreur ! : ' + error);
-               }
-           );
+    var idThematique = thematique.id;
+    console.log('id thématique à supprimer: ' + idThematique);
+    let options = {
+      withCredentials: true
+    };
+    // Supprimer une thematique
+    this.httpClient
+      .delete(this.url + 'delete/' + idThematique, options)
+      .subscribe(
+        () => {
+          console.log('suppression thematique OK');
+          alert('thématique ' + thematique.nom + ' supprimée');
+          // supprimer la thématique qsi niveau 1 dans la liste en cours
+          if (thematique.niveau == 1) {
+            var index = 0;
+            var indexRecherche: number;
+            for (let theme of this.themes) {
+              if (theme.id == idThematique) {
+                indexRecherche = index;
+              }
+              index = index + 1;
+            }
+            this.themes.splice(indexRecherche, 1);
+            this.emitThemesSubject();
+          }
+        },
+        (error) => {
+          alert('thématique non supprimée');
+          console.log('Erreur ! : ' + error);
+        }
+      );
   }
 
   updateThematique(thematique: Thematique): any {
-      let options = {
-                   withCredentials: true
-      };
-      // Créer une thematique
-      this.httpClient
-           .put<any>(this.url + 'update', thematique, options)
-           .subscribe(
-               (response) => {
-                    console.log('update thematique OK');
-                    alert('thématique ' + response.nom + ' modifiée');
-                    if (response.niveau == 1) {
-                        var index = 0;
-                        for (let theme of this.themes) {
-                             if (theme.id == response.id) {
-                                  this.themes[index] = response;
-                             }
-                             index = index + 1;
-                        }
-                        this.emitThemesSubject();
-                    }
-                    if (response.niveau == 2) {
-                        var index = 0;
-                        for (let theme of this.themesNiveau2) {
-                             if (theme.id == response.id) {
-                                  this.themesNiveau2[index] = response;
-                             }
-                             index = index + 1;
-                        }
-                        this.emitThemesNiveau2Subject();
-                    }
-                    if (response.niveau == 3) {
-                        var index = 0;
-                        for (let theme of this.themesNiveau3) {
-                             if (theme.id == response.id) {
-                                  this.themesNiveau3[index] = response;
-                             }
-                             index = index + 1;
-                        }
-                        this.emitThemesNiveau3Subject();
-                    }
+    let options = {
+      withCredentials: true
+    };
+    // Créer une thematique
+    this.httpClient
+      .put<any>(this.url + 'update', thematique, options)
+      .subscribe(
+        (response) => {
+          console.log('update thematique OK');
+          alert('thématique ' + response.nom + ' modifiée');
+          if (response.niveau == 1) {
+            var index = 0;
+            for (let theme of this.themes) {
+              if (theme.id == response.id) {
+                this.themes[index] = response;
+              }
+              index = index + 1;
+            }
+            this.emitThemesSubject();
+          }
+          if (response.niveau == 2) {
+            var index = 0;
+            for (let theme of this.themesNiveau2) {
+              if (theme.id == response.id) {
+                this.themesNiveau2[index] = response;
+              }
+              index = index + 1;
+            }
+            this.emitThemesNiveau2Subject();
+          }
+          if (response.niveau == 3) {
+            var index = 0;
+            for (let theme of this.themesNiveau3) {
+              if (theme.id == response.id) {
+                this.themesNiveau3[index] = response;
+              }
+              index = index + 1;
+            }
+            this.emitThemesNiveau3Subject();
+          }
 
-                    return response;
-               },
-               (error) => {
-                    alert('thématique non modifiée');
-                    console.log('Erreur ! : ' + error);
-               }
-           );
+          return response;
+        },
+        (error) => {
+          alert('thématique non modifiée');
+          console.log('Erreur ! : ' + error);
+        }
+      );
   }
 
   uploadImageTheme(theme: any, file) {
-      const uploadData = new FormData();
-      uploadData.append('file', file);
-      uploadData.append('theme', theme.id);
+    const uploadData = new FormData();
+    uploadData.append('file', file);
+    uploadData.append('theme', theme.id);
 
-      let options = {
-//                  reportProgress: true,
-//                  observe: 'event',
-                  withCredentials: true
-      };
-      // uploader l'image de fond d'un thème
-      this.httpClient
-           .post<any>(this.url + 'updateupload/id', uploadData, options)
-           .subscribe(
-               (response) => {
-                    console.log('upload image OK');
-                    alert('thématique ' + response.nom + ' : image uploadée avec succès');
-                    return response;
-               },
-               (error) => {
-                    alert('upload image non réalisé');
-                    console.log('Erreur ! : ' + error);
-               }
-//               (event) => {
-//                    console.log(event);
-//               }
-           );
+    let options = {
+      //                  reportProgress: true,
+      //                  observe: 'event',
+      withCredentials: true
+    };
+    // uploader l'image de fond d'un thème
+    this.httpClient
+      .post<any>(this.url + 'updateupload/id', uploadData, options)
+      .subscribe(
+        (response) => {
+          console.log('upload image OK');
+          alert('thématique ' + response.nom + ' : image uploadée avec succès');
+          return response;
+        },
+        (error) => {
+          alert('upload image non réalisé');
+          console.log('Erreur ! : ' + error);
+        }
+        //               (event) => {
+        //                    console.log(event);
+        //               }
+      );
   }
 
   trierThemesIdCroissant() {
-      this.themes.sort(function(a,b) {
-          if (a.id > b.id) { return 1;}
-          if (a.id < b.id) { return -1;}
-          return 0;
-      });
+    this.themes.sort(function (a, b) {
+      if (a.id > b.id) { return 1; }
+      if (a.id < b.id) { return -1; }
+      return 0;
+    });
   }
 
   trierThemesNiveau2IdCroissant() {
-      this.themesNiveau2.sort(function(a,b) {
-          if (a.id > b.id) { return 1;}
-          if (a.id < b.id) { return -1;}
-          return 0;
-      });
+    this.themesNiveau2.sort(function (a, b) {
+      if (a.id > b.id) { return 1; }
+      if (a.id < b.id) { return -1; }
+      return 0;
+    });
   }
 
   trierThemesNiveau3IdCroissant() {
-      this.themesNiveau3.sort(function(a,b) {
-          if (a.id > b.id) { return 1;}
-          if (a.id < b.id) { return -1;}
-          return 0;
-      });
+    this.themesNiveau3.sort(function (a, b) {
+      if (a.id > b.id) { return 1; }
+      if (a.id < b.id) { return -1; }
+      return 0;
+    });
   }
 
 }

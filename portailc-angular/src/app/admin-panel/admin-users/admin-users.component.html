@@ -24,10 +24,9 @@
   </p-toolbar>
 
   <p-table #dt [value]="users$ | async" [rows]="10" [paginator]="true"
-    [globalFilterFields]="['uid','nom','prenom','uoAffectation','siteExercice', 'fonction', 'profil']"
+    [globalFilterFields]="['uid','nom','prenom','uoAffectation','siteExercice', 'fonction']"
     [(selection)]="selectedUsers" [rowHover]="true" dataKey="id"
-    currentPageReportTemplate="Consultation des utilisateurs {first} à {last} sur {totalRecords} "
-    [showCurrentPageReport]="true">
+    currentPageReportTemplate="Utilisateurs {first} à {last} sur {totalRecords} " [showCurrentPageReport]="true">
 
     <ng-template pTemplate="header">
       <tr>
@@ -40,14 +39,10 @@
         </th>
         <th pSortableColumn="prenom">Prénom <p-sortIcon field="prenom"></p-sortIcon>
         </th>
-        <th pSortableColumn="uoAffectation">UO Affectation <p-sortIcon field="uoAffectation"></p-sortIcon>
-        </th>
-        <th pSortableColumn="siteExercice">Site d'Exercice <p-sortIcon field="siteExercice"></p-sortIcon>
-        </th>
-        <th pSortableColumn="fonction">Fonction <p-sortIcon field="fonction"></p-sortIcon>
-        </th>
-        <th pSortableColumn="profil">Profil <p-sortIcon field="profil"></p-sortIcon>
-        </th>
+        <th>UO Affectation</th>
+        <th>Site d'Exercice</th>
+        <th>Fonction</th>
+        <th>Profil</th>
         <th></th>
       </tr>
     </ng-template>
@@ -62,7 +57,7 @@
         <td>{{user.uoAffectation}}</td>
         <td>{{user.siteExercice}}</td>
         <td>{{user.fonction}}</td>
-        <td>{{user.profil}}</td>
+        <td>{{user.profil.nom}}</td>
 
         <td>
           <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2"
@@ -75,46 +70,80 @@
   </p-table>
 </div>
 
-<p-dialog [(visible)]="userDialog" [style]="{width: '50%'}" header="User Details" [modal]="true" styleClass="p-fluid">
+<p-dialog [(visible)]="userDialog" [style]="{width: '50%'}" [modal]="true" styleClass="p-fluid">
   <ng-template pTemplate="header">
-
+    <h1 class="p-text-center" *ngIf="!user.id">Créer un nouvel utilisateur:</h1>
+    <h1 class="p-text-center" *ngIf="user.id">Modifier utilisateur:</h1>
   </ng-template>
   <ng-template pTemplate="content">
-    <div class="p-field">
+    <div *ngIf="!user.id" class="p-field">
       <form (ngSubmit)="searchCollaborateurFromRefo()" [formGroup]="searchInRefoForm">
         <input type="text" formControlName="uid">
         <button type="submit">Rechercher Collaborateur</button>
       </form>
     </div>
-    <div class="p-field">
-      <label for="nom">Nom : </label>
-      <input type="text" pInputText id="nom" [(ngModel)]="user.nom" required autofocus />
-      <small class="p-invalid" *ngIf="submitted && !user.nom">Nom requis.</small>
-    </div>
-    <div class="p-field">
-      <label for="prenom">Prénom : </label>
-      <input id="prenom" pInputText [(ngModel)]="user.prenom" required />
-    </div>
-    <div class="p-field">
-      <label for="uoAffectation">UO Affectation : </label>
-      <input id="uoAffectation" pInputText [(ngModel)]="user.uoAffectation" required />
-    </div>
-    <div class="p-field">
-      <label for="siteExercie">Site d'Exercice : </label>
-      <input id="siteExercie" pInputText [(ngModel)]="user.siteExercice" required />
-    </div>
-    <div class="p-field">
-      <label for="fonction">Fonction : </label>
-      <input id="fonction" pInputText [(ngModel)]="user.fonction" required />
-    </div>
-    <div class="p-field">
-      <label for="profil">Profil : </label>
-      <select id="profil" [(ngModel)]="user.profil" required>
-        <option selected>Utilisateur</option>
-        <option>Rédacteur</option>
-        <option>Administrateur</option>
-      </select>
-    </div>
+    <form [formGroup]="userForm">
+      <!-- <div class="p-field">
+        <label for="nom">Nom : </label>
+        <input type="text" pInputText id="nom" [(ngModel)]="user.nom" required autofocus />
+        <small class="p-invalid" *ngIf="submitted && !user.nom">Nom requis.</small>
+      </div>
+      <div class="p-field">
+        <label for="prenom">Prénom : </label>
+        <input id="prenom" pInputText [(ngModel)]="user.prenom" required />
+      </div>
+      <div class="p-field">
+        <label for="uoAffectation">UO Affectation : </label>
+        <input id="uoAffectation" pInputText [(ngModel)]="user.uoAffectation" required />
+      </div>
+      <div class="p-field">
+        <label for="siteExercie">Site d'Exercice : </label>
+        <input id="siteExercie" pInputText [(ngModel)]="user.siteExercice" required />
+      </div>
+      <div class="p-field">
+        <label for="fonction">Fonction : </label>
+        <input id="fonction" pInputText [(ngModel)]="user.fonction" required />
+      </div> -->
+      <input type="hidden"  id="id" formControlName="id"/>
+      <div class="form-group">
+        <label for="uid">UID : </label>
+        <input type="text" pInputText id="uid" formControlName="uid" required />
+        <small class="p-invalid" *ngIf="submitted && !user.nom">UID requis.</small>
+      </div>
+      <div class="form-group">
+        <label for="nom">Nom : </label>
+        <input type="text" pInputText id="nom" formControlName="nom" required />
+        <small class="p-invalid" *ngIf="submitted && !user.nom">Nom requis.</small>
+      </div>
+      <div class="form-group">
+        <label for="nom">Prénom : </label>
+        <input type="text" pInputText id="nom" formControlName="prenom" required />
+        <small class="p-invalid" *ngIf="submitted && !user.prenom">Prénom requis.</small>
+      </div>
+      <div class="form-group">
+        <label for="uoAffectation">UO Affectation : </label>
+        <input type="text" pInputText id="uoAffectation" formControlName="uoAffectation" required />
+        <small class="p-invalid" *ngIf="submitted && !user.uoAffectation">UO Affectation requise.</small>
+      </div>
+      <div class="form-group">
+        <label for="siteExercice">Site d'exercice : </label>
+        <input type="text" pInputText id="siteExercice" formControlName="siteExercice" required />
+        <small class="p-invalid" *ngIf="submitted && !user.uoAffectation">Site d'exercie requis.</small>
+      </div>
+      <div class="form-group">
+        <label for="fonction">Fonction : </label>
+        <input type="text" pInputText id="fonction" formControlName="fonction" required />
+        <small class="p-invalid" *ngIf="submitted && !user.uoAffectation">Site d'exercie requis.</small>
+      </div>
+      <div class="form-group">
+        <label for="fonction">Profil : </label>
+        <select class="form-control" formControlName="profil">
+          <ng-container *ngFor="let profil of profils$ | async">
+            <option [selected]="user.profil ? profil.id == user.profil.id : profil.nom == 'Utilisateur'" [ngValue]="profil">{{ profil.nom }}</option>
+          </ng-container>
+        </select>
+      </div>
+    </form>
   </ng-template>
 
   <ng-template pTemplate="footer">

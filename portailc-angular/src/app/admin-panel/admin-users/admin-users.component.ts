@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/api';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { Profil } from 'src/app/models/Profil';
 import { User } from 'src/app/models/User';
 import { Utilisateur } from 'src/app/models/Utilisateur';
+import { ProfilService } from 'src/app/services/profil.service';
 import { UtilisateurService } from 'src/app/services/utilisateur.service';
 
 @Component({
@@ -26,64 +28,137 @@ export class AdminUsersComponent implements OnInit {
   userDialog: boolean;
 
   users$: Observable<User[]>;
-
   user: User;
-
   selectedUsers: User[];
+
+  profils$: Observable<Profil[]>;
+  profil: Profil;
 
   submitted: boolean;
 
   cols: any[];
 
   searchInRefoForm: FormGroup;
+  userForm: FormGroup;
 
   constructor(
     private utilisateurService: UtilisateurService,
+    private profilService: ProfilService,
     private messageService: MessageService,
-    private confirmationService: ConfirmationService) { }
+    private confirmationService: ConfirmationService,
+    private formBuilder: FormBuilder) { }
 
   ngOnInit(): void {
 
     this.utilisateurService.getAllUtilisateurs();
     this.users$ = this.utilisateurService.utilisateurs$;
-
+    this.profilService.getAllProfils();
+    this.profils$ = this.profilService.profils$;
+    this.user = {};
     console.log('Admin-users.component => users$ = ');
-    console.log(this.users$);
+    console.log(this.utilisateurService.getUtilisateursValue());
+    console.log('Admin-users.component => profils$ = ');
+    console.log(this.profilService.getProfilsValue());
+    this.initForm();
+
   }
+
+  initForm() {
+    // Initialisation du formulaire permettant de récupérer un utilisateur depuis le REFO par son UID
+    this.searchInRefoForm = this.formBuilder.group({
+      uid: ['', Validators.required, , Validators.pattern(/[0-9a-zA-Z]{6}/)]
+    });
+    // Initialisation du formulaire utilisateur
+    this.userForm = this.formBuilder.group({
+      id: [this.user.id],
+      uid: [this.user.uid, Validators.required, , Validators.pattern(/[0-9a-zA-Z]{6}/)],
+      nom: [this.user.nom, Validators.required, , Validators.pattern(/[0-9a-zA-Z]/)],
+      prenom: [this.user.prenom, Validators.required, , Validators.pattern(/[0-9a-zA-Z]/)],
+      uoAffectation: [this.user.uoAffectation, Validators.required, , Validators.pattern(/[0-9a-zA-Z]/)],
+      siteExercice: [this.user.siteExercice, Validators.required, , Validators.pattern(/[0-9a-zA-Z]/)],
+      fonction: [this.user.fonction, Validators.required, , Validators.pattern(/[0-9a-zA-Z]/)],
+      profil: [this.user.profil]
+    });
+  }
+
+  updateUserFormValues() {
+    this.userForm.controls.id.setValue(this.user.id);
+    this.userForm.controls.uid.setValue(this.user.uid);
+    this.userForm.controls.nom.setValue(this.user.nom);
+    this.userForm.controls.prenom.setValue(this.user.prenom);
+    this.userForm.controls.uoAffectation.setValue(this.user.uoAffectation);
+    this.userForm.controls.siteExercice.setValue(this.user.siteExercice);
+    this.userForm.controls.fonction.setValue(this.user.fonction);
+    this.userForm.controls.profil.setValue(this.user.profil);
+    console.log(this.userForm.controls.profil.value);
+  }
+
+// On force la méthode à attendre le retour de la requête grâce à async / await
+  async searchCollaborateurFromRefo() {
+    const uid = this.searchInRefoForm.controls.uid.value;
+
+    // On va chercher le collaborateur présent dans le REFO que l'on stocke dans
+    // le _collaborateurSubject
+    await this.utilisateurService.getCollaborateurRefoByUid(uid);
+    // On récupère la valeur du _collaborateurSubject
+    this.user = this.utilisateurService.getCollaborateurValue();
+
+    // On met à jour les champs du formulaire avec les valeurs récupérées
+    this.updateUserFormValues();
+  }
+
+  // Fenêtre modale
   openNew() {
-    this.user = new User();
+
+    this.user = {};
+    this.updateUserFormValues();
     this.submitted = false;
     this.userDialog = true;
   }
 
-
   deleteSelectedUsers() {
     this.confirmationService.confirm({
-      message: 'Are you sure you want to delete the selected users?',
-      header: 'Confirm',
+      message: 'Voulez-vous vraiment supprimer les utilisateurs sélectionnés ?',
+      header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        //this.users$ = this.users$.filter(val => !this.selectedUsers.includes(val));
-        this.selectedUsers = null;
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'users Deleted', life: 3000 });
+        try {
+          this.selectedUsers.forEach(user => {
+            //this.user = user;
+            this.utilisateurService.deleteUtilisateur(this.utilisateurService.mapToUtilisateur(user));
+          });
+          this.messageService.add({ severity: 'success', summary: 'Succès: ', detail: 'Utilisateurs supprimés !', life: 3000 });
+        } catch (error) {
+          this.messageService.add({ severity: 'error', summary: 'Erreur: ', detail: error, life: 3000 });
+        } finally {
+          this.selectedUsers = null;
+        }
       }
     });
   }
 
   editUser(user: User) {
+    console.log(user);
     this.user = user;
+    console.log(this.user);
+    this.updateUserFormValues();
     this.userDialog = true;
   }
 
-  deleteUser(user: User) {
+  deleteUser(user: any) {
     this.confirmationService.confirm({
-      message: 'Are you sure you want to delete ' + user.uid + ' : ' + user.nom + '?',
-      header: 'Confirm',
+      message: 'Voulez-vous vraiment supprimer l\'utilisateur ' + user.uid + ' : ' + user.nom + '?',
+      header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        //this.users$ = this.users$.filter(val => val.id !== user.id);
-        //this.user = ;
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'User Deleted', life: 3000 });
+        try {
+          this.utilisateurService.deleteUtilisateur(user);
+          //this.users$ = this.users$.filter(val => val.id !== user.id);
+          //this.user = ;
+          this.messageService.add({ severity: 'success', summary: 'Succès: ', detail: 'Utilisateur supprimé !', life: 3000 });
+        } catch (error) {
+          this.messageService.add({ severity: 'error', summary: 'Erreur: ', detail: error, life: 3000 });
+        }
       }
     });
   }
@@ -95,18 +170,24 @@ export class AdminUsersComponent implements OnInit {
 
   saveUser() {
     this.submitted = true;
+    console.log(this.userForm.value);
 
-    if (this.user.nom.trim()) {
+    let utilisateurASauvegarder = new Utilisateur();
+    utilisateurASauvegarder = this.userForm.value;
+    console.log(utilisateurASauvegarder);
+
+
+    try {
       // Si l'id existe, on procède à une modification
       if (this.user.id) {
-        this.utilisateurService.updateUtilisateur(this.user.mapToUtilisateur());
+        this.utilisateurService.updateUtilisateur(utilisateurASauvegarder);
         this.users$[this.findIndexById(this.user.id)] = this.user;
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Utilisateur mis à jour avec succès!', life: 3000 });
+        this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Utilisateur mis à jour !', life: 3000 });
       }
       // Sinon on crée un nouvel utilisateur
       else {
         // On crée le nouvel utilisateur en base, on reçoit un utilisateur avec son id en retour
-        let nouvelUtilisateur = this.utilisateurService.createUtilisateur(this.user.mapToUtilisateur());
+        let nouvelUtilisateur = this.utilisateurService.createUtilisateur(utilisateurASauvegarder);
         // On récupère la valeur de _utilisateursSubject
         let utilisateurs = this.utilisateurService.getUtilisateursValue();
         // On y insère le nouvel utilisateur
@@ -114,12 +195,19 @@ export class AdminUsersComponent implements OnInit {
         // On met à jour la vue en modifiant _utilisateursSubject
         this.utilisateurService.setUtilisateursSubject(utilisateurs);
 
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Utilisateur créé avec succès!', life: 3000 });
+        this.messageService.add({ severity: 'success', summary: 'Succès: ', detail: 'Utilisateur créé !', life: 3000 });
       }
 
       //this.users = [...this.users];
-      this.userDialog = false;
-      this.user = new User();
+      // this.userDialog = false;
+      // this.user = new User();
+    } catch(error) {
+      console.log('erreur dans saveUser: ' + error);
+      this.messageService.add({ severity: 'error', summary: 'Erreur: ', detail: error, life: 3000 });
+
+    } finally {
+      this.hideDialog();
+      this.user = {};
     }
   }
 
@@ -137,9 +225,5 @@ export class AdminUsersComponent implements OnInit {
     return index;
   }
 
-  searchCollaborateurFromRefo() {
-    const uid = this.searchInRefoForm.controls.uid.value;
-    console.log(uid);
-    console.log(this.utilisateurService.getCollaborateurRefoByUid(uid));
-  }
+
 }

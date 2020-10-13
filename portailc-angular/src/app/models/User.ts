@@ -23,9 +23,9 @@ export class User {
     this.profil = profil;
   }
 
-  getUID() {
-    return this.uid;
-  }
+  // getUID() {
+  //   return this.uid;
+  // }
 
 
 
