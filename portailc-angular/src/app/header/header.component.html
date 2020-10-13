@@ -7,22 +7,25 @@
 
   <ul *ngIf="getIsAuth() === true" class="nav navbar-nav flex">
     <li>Bienvenue {{ getUsername() }} !</li>
-    <li class="active" *ngIf="getIsAuth() === true
+    <li>
+      <a (click)="toWelcomePage()">
+        <i class="fas fa-home"></i>
+      </a>
+    </li>
+    <li class="active" *ngIf="getIsEditable() == true
     && ( controleDroitUser('Modification') === true
          || controleDroitUser('Création') === true
          || controleDroitUser('Suppression') === true)">
       <a *ngIf="indicateursEdition.isModeEdition != true" (click)="activerModeEdition()">
-        <img src="/assets/images/icons8_pencil_30px.png" alt="activer le mode édition de liens"
-          title="activer le mode édition de liens">
+        <i class="fas fa-edit"></i>
       </a>
       <a *ngIf="indicateursEdition.isModeEdition === true" (click)="desactiverModeEdition()">
-        <img src="/assets/images/icons8_no_edit_30px.png" alt="désactiver le mode édition de liens"
-          title="désactiver le mode édition de liens">
+        <i class="far fa-edit"></i>
       </a>
     </li>
-    <li class="active"  *ngIf="controleDroitUser('Administration') === true">
+    <li class="active" *ngIf="controleDroitUser('Administration') === true">
       <a (click)="onAdmin()">
-        <i class="pi pi-cog"></i>
+        <i class="fas fa-cogs"></i>
       </a>
     </li>
     <li class="active">

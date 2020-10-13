@@ -27,19 +27,7 @@ export class User {
     return this.uid;
   }
 
-  mapToUtilisateur(): Utilisateur {
-    let utilisateur: Utilisateur;
-    utilisateur.id = this.id;
-    utilisateur.nom = this.nom;
-    utilisateur.prenom = this.prenom;
-    utilisateur.uid = this.uid;
-    utilisateur.uoAffectation = this.uoAffectation;
-    utilisateur.siteExercice = this.siteExercice;
-    utilisateur.fonction = this.fonction;
-    utilisateur.profil = this.profil;
 
-    return utilisateur;
-  }
 
 }
 

@@ -22,7 +22,7 @@ export class SectionArticleConnexionComponent implements OnInit, OnDestroy {
 
 
   ngOnInit(): void {
-
+    sessionStorage.clear();
     this.initForm();
   }
 

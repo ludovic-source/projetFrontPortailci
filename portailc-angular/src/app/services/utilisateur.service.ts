@@ -18,15 +18,15 @@ export class UtilisateurService {
   private _utilisateursSubject: BehaviorSubject<User[]> = new BehaviorSubject([]);
 
   // users$ est un Observable et peut être consommé par nos Components
-  readonly collaborateur$: Observable<User> =  this._collaborateurSubject.asObservable();
-  readonly utilisateurs$: Observable<User[]> =  this._utilisateursSubject.asObservable();
+  readonly collaborateur$: Observable<User> = this._collaborateurSubject.asObservable();
+  readonly utilisateurs$: Observable<User[]> = this._utilisateursSubject.asObservable();
 
 
   allUtilisateursSubject = new Subject<any[]>();
   private allUtilisateurs: any[];
 
 
-
+  // A supprimer une fois l'implémentation opérationnelle
   private collaborateursBDDF = [
     {
       uid: '100100',
@@ -92,13 +92,13 @@ export class UtilisateurService {
     return this.collaborateursBDDF;
   }
 
-  getCollaborateurRefoByUid(uid: string) {
+  getCollaborateurRefoByUid(uid: string): any {
     let options = {
       withCredentials: true
     };
     return this.httpClient.get(this.url + '/getRefogByUID/' + uid, options)
       .pipe(
-        map((response: any) => response.data)
+        map((response: any) => response)
       )
       .toPromise()
       .then(
@@ -146,6 +146,7 @@ export class UtilisateurService {
           return response;
         },
         (error) => {
+
           alert('utilisateur non créé');
           console.log('Erreur ! : ' + error);
         }
@@ -175,6 +176,7 @@ export class UtilisateurService {
         (error) => {
           alert('utilisateur non mis à jour');
           console.log('Erreur ! : ' + error);
+
         }
       );
   }
@@ -189,8 +191,18 @@ export class UtilisateurService {
         (response) => {
           console.log('suppression utilisateur OK');
           alert('utilisateur ' + utilisateur.nom + ' supprimé');
+
+          let userToRemove = this.getUtilisateursValue().find(user => user.id == utilisateur.id);
+          let indexToRemove = this.getUtilisateursValue().indexOf(userToRemove);
+
+          // On supprime l'élément du tableau
+          this.getUtilisateursValue().splice(indexToRemove, 1);
+          // On met à jour la vue
+          this._utilisateursSubject.next(this.getUtilisateursValue());
+
           var index = 0;
           var indexRecherche: number;
+
           for (let utilisateurCourant of this.allUtilisateurs) {
             if (utilisateurCourant.id == utilisateur.id) {
               indexRecherche = index;
@@ -217,9 +229,24 @@ export class UtilisateurService {
           } else {
             alert('utilisateur non supprimé');
             console.log('Erreur ! : ' + error);
+            return error;
           }
         }
       );
+  }
+
+  mapToUtilisateur(user: User): Utilisateur {
+    let utilisateur: Utilisateur;
+    utilisateur.id = user.id;
+    utilisateur.nom = user.nom;
+    utilisateur.prenom = user.prenom;
+    utilisateur.uid = user.uid;
+    utilisateur.uoAffectation = user.uoAffectation;
+    utilisateur.siteExercice = user.siteExercice;
+    utilisateur.fonction = user.fonction;
+    utilisateur.profil = user.profil;
+
+    return utilisateur;
   }
 
 

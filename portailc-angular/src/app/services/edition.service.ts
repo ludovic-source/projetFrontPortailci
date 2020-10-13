@@ -3,6 +3,8 @@ import { BehaviorSubject, Observable } from 'rxjs';
 
 export class EditionService {
 
+    private _isEditableSubject: BehaviorSubject<boolean> = new BehaviorSubject(false);
+    readonly isEditable$: Observable<boolean>;
     indicateursEditionSubject = new Subject<any>();
     private indicateursEdition = {
                         lieuEdition: 0,     // permet d'indiquer de quel niveau provient la demande d'édition
@@ -14,6 +16,13 @@ export class EditionService {
                         indicateurUpdate: false,    // permet d'indiquer si l'utilisateur veut faire une modification
                         indicateurModifierThemeParent: false  // permet d'indiquer si l'utilisateur souhaite une modification du rattachement
     };
+
+    getIsEditableSubjectValue() {
+      return this._isEditableSubject.getValue();
+    }
+    setIsEditableSubject(data) {
+      this._isEditableSubject.next(data);
+    }
 
     emitIndicateursEditionSubject() {
         this.indicateursEditionSubject.next(this.indicateursEdition);

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 import { EditionService } from '../services/edition.service';
@@ -9,7 +9,7 @@ import { ThemeService } from '../services/theme.service';
   templateUrl: './menu-arborescent-container.component.html',
   styleUrls: ['./menu-arborescent-container.component.css']
 })
-export class MenuArborescentContainerComponent implements OnInit {
+export class MenuArborescentContainerComponent implements OnInit, OnDestroy {
   indicateursEdition: any;
   indicateursEditionSubscription: Subscription;
   isModeParametrage = false;
@@ -32,16 +32,17 @@ export class MenuArborescentContainerComponent implements OnInit {
         this.indicateursEdition = indicateursEdition;
       });
     this.editionService.emitIndicateursEditionSubject();
-    this.userSubscription = this.authService.userSubject.subscribe(
-      (user: any) => {
-        this.user = user;
-      });
-    this.authService.emitUserSubject();
+
     this.themesSubscription = this.themeService.themesSubject.subscribe(
       (themes: any[]) => {
         this.themes = themes;
       });
     this.themeService.emitThemesSubject();
+    this.editionService.setIsEditableSubject(true);
+  }
+
+  ngOnDestroy(): void {
+    this.editionService.setIsEditableSubject(false);
   }
 
   getIsAuth() {
