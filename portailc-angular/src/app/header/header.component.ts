@@ -91,7 +91,7 @@ export class HeaderComponent implements OnInit {
   }
 
   isInWelcomePage() {
-    if (this.router.url.endsWith('/navigation')) {
+    if (this.router.url.match('navigation')) {
       return true;
     } else {
       return false;

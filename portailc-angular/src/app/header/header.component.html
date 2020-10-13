@@ -32,7 +32,7 @@
     </li>
 <!-- Bouton pour quitter le mode édition -->
 <li class="active" *ngIf="getIsEditable() == true
-    && indicateursEdition.isModeEdition != true
+    && indicateursEdition.isModeEdition != false
     && ( controleDroitUser('Modification') === true
          || controleDroitUser('Création') === true
          || controleDroitUser('Suppression') === true)">
