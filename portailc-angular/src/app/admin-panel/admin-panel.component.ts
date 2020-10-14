@@ -20,7 +20,7 @@ export class AdminPanelComponent implements OnInit {
   ngOnInit(): void {
     this.items = [
       { label: 'Utilisateurs', icon: 'pi pi-fw pi-user', routerLink: 'users' },
-      { label: 'Profils', icon: 'pi pi-fw pi-id-card' }
+      { label: 'Profils', icon: 'pi pi-fw pi-id-card', routerLink: 'profiles' }
     ];
     this.activeItem = this.items[0];
     this.router.navigate(['/admin/users']);

@@ -1,1 +1,110 @@
-<p>admin-profiles works!</p>
+<p-toast></p-toast>
+
+<div class="card">
+  <p-toolbar styleClass="p-mb-4">
+    <ng-template pTemplate="left">
+      <div class="p-mr-2">
+        <button pButton pRipple label="Ajouter" icon="pi pi-plus" class="p-button-success p-m-2"
+          ></button>
+      </div>
+      <button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger p-m-2"
+         [disabled]="!selectedProfiles || !selectedProfiles.length"></button>
+    </ng-template>
+
+    <ng-template pTemplate="right">
+
+      <div class="p-d-flex p-ai-center p-jc-between">
+        <span class="p-input-icon-left">
+          <i class="pi pi-search"></i>
+          <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+            placeholder="Search...">
+        </span>
+      </div>
+    </ng-template>
+  </p-toolbar>
+
+  <p-table #dt [value]="profils$ | async" [rows]="5" [paginator]="true"
+    [globalFilterFields]="['uid','nom','prenom','uoAffectation','siteExercice', 'fonction']"
+    [(selection)]="selectedProfiles" [rowHover]="true" dataKey="id"
+    currentPageReportTemplate="Profil(s) {first} à {last} sur {totalRecords} " [showCurrentPageReport]="true">
+
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 3rem">
+          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+        </th>
+        <th pSortableColumn="nom">Nom <p-sortIcon field="nom"></p-sortIcon>
+        </th>
+        <th >Description</th>
+        <th>Consultation</th>
+        <th>Création</th>
+        <th>Modification</th>
+        <th>Suppression</th>
+        <th>Administration</th>
+        <th></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-profil>
+      <tr>
+        <td>
+          <p-tableCheckbox [value]="profil"></p-tableCheckbox>
+        </td>
+        <td>{{profil.nom}}</td>
+        <td>{{profil.description}}</td>
+        <td>
+          Consultation
+        </td>
+        <td>
+          Création
+        </td>
+        <td>
+          Modification
+        </td>
+        <td>
+          Suppression
+        </td>
+        <td>
+          Administration
+        </td>
+        <td>
+          <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2"
+            ></button>
+          <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
+            ></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<p-dialog [(visible)]="profileDialog" [style]="{width: '50%'}" [modal]="true" styleClass="p-fluid">
+  <ng-template pTemplate="header">
+    <h1 class="p-text-center" *ngIf="!profil.id">Créer un nouvel utilisateur:</h1>
+    <h1 class="p-text-center" *ngIf="profil.id">Modifier utilisateur:</h1>
+  </ng-template>
+  <ng-template pTemplate="content">
+
+    <form [formGroup]="profileForm">
+      <input type="hidden"  id="id" formControlName="id"/>
+
+      <div class="form-group">
+        <label for="nom">Nom : </label>
+        <input type="text" pInputText id="nom" formControlName="nom" required />
+        <small class="p-invalid" *ngIf="submitted && !profil.nom">Nom requis.</small>
+      </div>
+      <div class="form-group">
+        <label for="description">Description : </label>
+        <input type="text" pInputText id="description" formControlName="description" required />
+        <small class="p-invalid" *ngIf="submitted && !profil.description">Description requise.</small>
+      </div>
+
+    </form>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+    <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveProfile()"></button>
+  </ng-template>
+</p-dialog>
+
+<p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
