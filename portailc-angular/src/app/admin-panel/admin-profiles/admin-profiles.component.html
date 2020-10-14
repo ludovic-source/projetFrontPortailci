@@ -5,7 +5,7 @@
     <ng-template pTemplate="left">
       <div class="p-mr-2">
         <button pButton pRipple label="Ajouter" icon="pi pi-plus" class="p-button-success p-m-2"
-          ></button>
+        (click)="openNew()"></button>
       </div>
       <button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger p-m-2"
          [disabled]="!selectedProfiles || !selectedProfiles.length"></button>
@@ -70,7 +70,7 @@
           <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2"
             ></button>
           <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
-            ></button>
+          (click)="deleteProfile(profil)"></button>
         </td>
       </tr>
     </ng-template>
@@ -79,8 +79,8 @@
 
 <p-dialog [(visible)]="profileDialog" [style]="{width: '50%'}" [modal]="true" styleClass="p-fluid">
   <ng-template pTemplate="header">
-    <h1 class="p-text-center" *ngIf="!profil.id">Créer un nouvel utilisateur:</h1>
-    <h1 class="p-text-center" *ngIf="profil.id">Modifier utilisateur:</h1>
+    <h1 class="p-text-center" *ngIf="!profil.id">Créer un nouveau profil:</h1>
+    <h1 class="p-text-center" *ngIf="profil.id">Modifier profil:</h1>
   </ng-template>
   <ng-template pTemplate="content">
 

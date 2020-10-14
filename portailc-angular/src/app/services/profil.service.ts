@@ -115,7 +115,6 @@ export class ProfilService {
       .subscribe(
         (response) => {
           console.log('suppression profil OK');
-          alert('profil ' + profil.nom + ' supprimé');
           var index = 0;
           var indexRecherche: number;
           for (let profilCourant of this.allProfils) {

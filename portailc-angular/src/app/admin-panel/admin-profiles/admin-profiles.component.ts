@@ -66,9 +66,42 @@ export class AdminProfilesComponent implements OnInit {
 
     });
   }
+
+  updateUserFormValues() {
+    this.profileForm.controls.id.setValue(this.profil.id);
+    this.profileForm.controls.nom.setValue(this.profil.nom);
+    this.profileForm.controls.description.setValue(this.profil.description);
+
+  }
+
+    // Fenêtre modale
+    openNew() {
+
+      this.profil = new Profil();
+      this.updateUserFormValues();
+      this.submitted = false;
+      this.profileDialog = true;
+    }
+
   hideDialog() {
     this.profileDialog = false;
     this.submitted = false;
+  }
+
+  deleteProfile(profil: any) {
+    this.confirmationService.confirm({
+      message: 'Voulez-vous vraiment supprimer le profil ' + profil.nom + ' ?',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        try {
+          this.profilService.deleteProfil(profil);
+          this.messageService.add({ severity: 'success', summary: 'Succès: ', detail: 'Profil supprimé !', life: 3000 });
+        } catch (error) {
+          this.messageService.add({ severity: 'error', summary: 'Erreur: ', detail: error, life: 3000 });
+        }
+      }
+    });
   }
 
   saveProfile() {
