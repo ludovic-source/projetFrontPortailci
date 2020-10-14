@@ -70,7 +70,17 @@ export class UtilisateurService {
                   console.log('Erreur ! : ' + error);
                 }
         );
-     }
+    }
+
+    async getAllUtilisateursPromise() {
+        let options = {
+            withCredentials: true
+        };
+        return this.httpClient
+            .get<any>(this.url + 'get', options)
+            .toPromise();
+        ; 
+    }
 
     createUtilisateur(utilisateur: Utilisateur): any {
         console.log('uid : ' + utilisateur.uid);

@@ -46,7 +46,7 @@ header
 #bloc_titre
 {
 	/*border : 0.5px solid black;*/
-	flex : 2;
+	flex : 1;
 	text-align: center;
 	align-self: flex-end;
 }
@@ -276,9 +276,15 @@ nav
   margin: 0px 5px 5px 0px;
 }
 
+tr
+{
+	border-bottom : 1px solid grey;
+}
+
 td, th
 {
-	border : 1px solid black;
+	padding-left: 5px;
+	padding-right: 5px;
 }
 
 .active {

@@ -1,20 +1,11 @@
-<div id="bloc_modification_parametrage">
-  <div class="bloc_modification_parametrage_choix mt-2">
-    <p>Quel type de modification souhaitez-vous ?</p>
-    <input class="form-check-input" type="radio" value="create" name="type_modification"
-           (change)="setTypeModification('create')"/>Créer un nouvel utilisateur<br />
-    <input class="form-check-input" type="radio" value="update" name="type_modification"
-           (change)="setTypeModification('updateProfil')"/>Modifier le profil d'un utilisateur<br />
-    <input class="form-check-input" type="radio" value="update" name="type_modification"
-           (change)="setTypeModification('updatePassword')"/>Modifier le mot de passe d'un utilisateur<br />
-    <input class="form-check-input" type="radio" value="delete" name="type_modification"
-           (change)="setTypeModification('delete')"/>Supprimer un utilisateur existant<br /><br />
-  </div>
+<div class="flex-row d-flex justify-content-between mr-3 mt-1">
+  <div>     
+      <button type="button" class="btn btn-dark ml-1" (click)="setTypeModification('create')">+ Ajouter</button>
+  </div>    
+</div>
 
-  <!-- formulaire pour les créations d'utilisateur -->
-  <div class="bloc_modification_parametrage_form"
-       *ngIf="typeModification === 'create'">
-
+<!-- Formulaire pour les créations d'utilisateur -->
+<div class="mb-2" *ngIf="typeModification === 'create'">
     <form (ngSubmit)="createUtilisateur(f)" #f="ngForm">
       <p>
         <em>Sélectionnez le collaborateur à créer : </em>
@@ -30,39 +21,30 @@
         UID : {{ collaborateur.uid }} <br />
         nom : {{ collaborateur.nom }} <br />
         prénom : {{ collaborateur.prenom }} <br />
-        UO d'affectation : {{ collaborateur.uoAffectation }} <br /><br />
+        UO d'affectation : {{ collaborateur.uoAffectation }} <br />
 
         <em>Complétez les champs obligatoires : </em><br />
         <label for="password">mot de passe : </label>
-        <input type="text" id="password" name="password" ngModel required><br /><br />
+        <input type="text" id="password" name="password" ngModel required><br />
         <em>Sélectionnez le profil de l'utilisateur : </em>
         <select id="profil_select" name="profil" ngModel required>
           <ng-container *ngFor="let profil of allProfils">
             <option [ngValue]="profil">{{ profil.nom }}</option>
           </ng-container>
         </select>
-        <br /><br />
-
-        <button class="bouton_bleu" type="submit" [disabled]="f.invalid">Créer utilisateur</button>
+        <br />
+        <button type="submit" class="btn btn-primary" [disabled]="f.invalid">Ajouter utilisateur</button>        
       </p>
     </form>
+    <button class="btn btn-secondary" (click)="quitterFormulaire()" >Quitter formulaire</button>
+</div>
 
-  </div>
 
-  <!-- formulaire pour les modifications de profil d'un utilisateur -->
-  <div class="bloc_modification_parametrage_form"
+<!-- formulaire pour les modifications de profil d'un utilisateur -->
+<div class="bloc_modification_parametrage_form"
        *ngIf="typeModification === 'updateProfil'">
-    <form (ngSubmit)="updateUtilisateurProfil(f)" #f="ngForm">
+    <form (ngSubmit)="updateUtilisateurProfil(f)" #f="ngForm">      
       <p>
-        <em>Sélectionnez l'utilisateur à modifier : </em>
-        <select id="utilisateur_update" name="utilisateur"
-                (ngModelChange)="setUtilisateur($event)" ngModel required>
-          <ng-container *ngFor="let utilisateur of allUtilisateurs">
-            <option [ngValue]="utilisateur">{{ utilisateur.uid }} - {{ utilisateur.nom}}</option>
-          </ng-container>
-        </select>
-      </p>
-      <p *ngIf="indicateurUtilisateur === true">
         UID : {{ utilisateur.uid }} <br />
         nom : {{ utilisateur.nom }} <br />
         prénom : {{ utilisateur.prenom }} <br />
@@ -76,53 +58,109 @@
           </ng-container>
         </select>
       </p>
-
-      <button class="bouton_bleu" type="submit" [disabled]="f.invalid">Modifier le profil</button>
+      <button type="submit" class="btn btn-primary" [disabled]="f.invalid">Modifier utilisateur</button>
+      <button class="btn btn-secondary ml-2" (click)="quitterFormulaire()" >Quitter formulaire</button>
     </form>
-
   </div>
 
-  <!-- formulaire pour les modifications de mot de passe d'un utilisateur -->
-  <div class="bloc_modification_parametrage_form"
-       *ngIf="typeModification === 'updatePassword'">
+<!-- formulaire pour les modifications de mot de passe d'un utilisateur -->
+<div class="bloc_modification_parametrage_form"
+ *ngIf="typeModification === 'updatePassword'">
     <form (ngSubmit)="updateUtilisateurPassword(f)" #f="ngForm">
-      <p>
-        <em>Sélectionnez l'utilisateur à modifier : </em>
-        <select id="utilisateur_password" name="utilisateur"
-                (ngModelChange)="setUtilisateur($event)" ngModel required>
-          <ng-container *ngFor="let utilisateur of allUtilisateurs">
-            <option [ngValue]="utilisateur">{{ utilisateur.uid }} - {{ utilisateur.nom}}</option>
-          </ng-container>
-        </select>
-      </p>
-      <p *ngIf="indicateurUtilisateur === true">
-        UID : {{ utilisateur.uid }} <br />
-        nom : {{ utilisateur.nom }} <br />
-        prénom : {{ utilisateur.prenom }} <br />
-        UO d'affectation : {{ utilisateur.uoAffectation }} <br /><br />
-        <label for="password_update">nouveau mot de passe : </label>
-        <input type="text" id="password_update" name="password" ngModel required><br /><br />
-      </p>
-      <button class="bouton_bleu" type="submit" [disabled]="f.invalid">Modifier le mot de passe</button>
-    </form>
-
-  </div>
-
-
-  <!-- formulaire pour les suppressions de profil -->
-  <div class="bloc_modification_parametrage_form"
-       *ngIf="typeModification === 'delete'">
-    <form (ngSubmit)="deleteUtilisateur(f)" #f="ngForm">
-      <p>
-        <em>Sélectionnez l'utilisateur à supprimer : </em>
-        <select id="utilisateur_delete" name="utilisateur" ngModel required>
-          <ng-container *ngFor="let utilisateur of allUtilisateurs">
-            <option [ngValue]="utilisateur">{{ utilisateur.uid }} - {{ utilisateur.nom}}</option>
-          </ng-container>
-        </select>
-      </p>
-      <button class="bouton_bleu" type="submit" [disabled]="f.invalid">Supprimer utilisateur</button>
-    </form>
-  </div>
-
+        <p>
+          UID : {{ utilisateur.uid }} <br />
+          nom : {{ utilisateur.nom }} <br />
+          prénom : {{ utilisateur.prenom }} <br />
+          UO d'affectation : {{ utilisateur.uoAffectation }} <br /><br />
+          <label for="password_update">nouveau mot de passe : </label>
+          <input type="text" id="password_update" name="password" ngModel required><br /><br />
+        </p>
+        <button type="submit" class="btn btn-primary" [disabled]="f.invalid">Modifier mot de passe utilisateur</button>
+        <button class="btn btn-secondary ml-2" (click)="quitterFormulaire()" >Quitter formulaire</button>
+    </form>    
 </div>
+
+<!-- Affichage de la liste des utilisateurs -->
+
+<div class='mt-3'>
+  <table>
+    <tr class="bg-primary text-white">
+      <th>uid</th>      
+      <th>nom</th>
+      <th>prenom</th>
+      <th>uoAffectation</th>
+      <th>siteExercice</th>  
+      <th>fonction</th>
+      <th>profil</th>
+      <th></th>
+    </tr>
+    <ng-container *ngFor="let utilisateur of allUtilisateurs; let indexUtilisateur = index">
+      <tr *ngIf="indexUtilisateur >= numeroPageEnCours * nbreUtilisateursParPage - nbreUtilisateursParPage
+        && indexUtilisateur < numeroPageEnCours * nbreUtilisateursParPage">
+        <td>{{ utilisateur.uid }}</td>
+        <td>{{ utilisateur.nom }}</td>
+        <td>{{ utilisateur.prenom }}</td>
+        <td>{{ utilisateur.uoAffectation }}</td>
+        <td>{{ utilisateur.siteExercice }}</td>
+        <td>{{ utilisateur.fonction }}</td>
+        <td>{{ utilisateur.profil.nom }}</td>
+        <td class="d-flex flex-row ml-2">
+          <p class="ml-2">
+            <svg (click)="supprimerUtilisateur(utilisateur)"
+                width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash" fill="red" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+              <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+            </svg>
+          </p>
+          <p class="ml-2">
+            <svg (click)="setTypeModification('updateProfil', utilisateur)"
+                width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-pencil-square" fill="green" xmlns="http://www.w3.org/2000/svg">
+              <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+              <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+            </svg>
+          </p>
+          <p class="ml-2">
+            <svg (click)="setTypeModification('updatePassword', utilisateur)"
+                width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-key" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" d="M0 8a4 4 0 0 1 7.465-2H14a.5.5 0 0 1 .354.146l1.5 1.5a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0L13 9.207l-.646.647a.5.5 0 0 1-.708 0L11 9.207l-.646.647a.5.5 0 0 1-.708 0L9 9.207l-.646.647A.5.5 0 0 1 8 10h-.535A4 4 0 0 1 0 8zm4-3a3 3 0 1 0 2.712 4.285A.5.5 0 0 1 7.163 9h.63l.853-.854a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.793-.793-1-1h-6.63a.5.5 0 0 1-.451-.285A3 3 0 0 0 4 5z"/>
+              <path d="M4 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+            </svg>
+          </p>  
+        </td>
+      </tr>
+    </ng-container>
+  </table>
+</div>
+
+<nav aria-label="..." class="mt-2">
+  <ul class="pagination justify-content-center mt-2">
+      <li class="page-item disabled" *ngIf="numeroPageEnCours == 1">
+          <a class="page-link" aria-disabled="true">Précédente</a>
+      </li>
+      <li class="page-item" *ngIf="numeroPageEnCours > 1">
+          <a class="page-link" (click)="afficherPagePrecedente()">Précédente</a>
+      </li>
+      <ng-container *ngFor="let utilisateur of allUtilisateurs; let indexUtilisateur=index">
+          <li class="page-item active" *ngIf="indexUtilisateur / nbreUtilisateursParPage + 1 == numeroPageEnCours">
+              <ng-container *ngIf="(indexUtilisateur < nbreUtilisateurs) 
+                                  && ((indexUtilisateur + nbreUtilisateursParPage) % nbreUtilisateursParPage == 0)">
+                  <a class="page-link" 
+                  (click)="afficherPage(indexUtilisateur / nbreUtilisateursParPage + 1)">{{ indexUtilisateur / nbreUtilisateursParPage + 1 }}</a>
+              </ng-container>
+          </li>
+          <li class="page-item" *ngIf="indexUtilisateur / nbreUtilisateursParPage + 1 != numeroPageEnCours">
+              <ng-container *ngIf="(indexUtilisateur < nbreUtilisateurs) 
+                                  && ((indexUtilisateur + nbreUtilisateursParPage) % nbreUtilisateursParPage == 0)">
+                  <a class="page-link" 
+                  (click)="afficherPage(indexUtilisateur / nbreUtilisateursParPage + 1)">{{ indexUtilisateur / nbreUtilisateursParPage + 1 }}</a>
+              </ng-container>
+          </li>
+      </ng-container>        
+      <li class="page-item" *ngIf="numeroPageEnCours < nbreUtilisateurs / nbreUtilisateursParPage">
+          <a class="page-link" (click)="afficherPageSuivante()">Suivante</a>
+      </li>
+      <li class="page-item disabled" *ngIf="numeroPageEnCours > nbreUtilisateurs / nbreUtilisateursParPage">
+          <a class="page-link" aria-disabled="true">Suivante</a>
+      </li>
+  </ul>
+</nav>

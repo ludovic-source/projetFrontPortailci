@@ -41,10 +41,14 @@ export class SectionParametrageProfilComponent implements OnInit {
       this.droitService.emitAllDroitsSubject();
   }
 
-  setTypeModification(typeModification: string) {
+  setTypeModification(typeModification: string, profil?: any) {
       this.typeModification = typeModification;
       this.droitService.getAllDroits();
       this.droitService.emitAllDroitsSubject();
+      if (typeModification === 'updateProfil') {
+          console.log("coucou");
+          this.profil = profil;
+      }
   }
 
   createProfil(form: NgForm) {
@@ -70,18 +74,18 @@ export class SectionParametrageProfilComponent implements OnInit {
           this.reinitialiserFormulaire();
       }
   }
-
+/*
   setProfil(profil: any) {
       this.profil = profil;
       this.indicateurProfil = true;
   }
-
+*/
   updateProfil(form: NgForm) {
       console.log(form.value);
       const nbreAllDroits = this.allDroits.length;
       var nbreDroitsVides = 0;
       const droitsProfil = [];
-      const profil = form.value['profil'];
+      //const profil = form.value['profil'];
       for (let droit of this.allDroits) {
           if (form.value[droit.nom] == '' || form.value[droit.nom] == false) {
               nbreDroitsVides += 1;
@@ -92,10 +96,13 @@ export class SectionParametrageProfilComponent implements OnInit {
       if (nbreDroitsVides == nbreAllDroits) {
           alert('veuillez cocher au moins un droit');
       } else {
-          profil.nom = form.value['nom'];
-          profil.description = form.value['description'];
-          profil.droits = droitsProfil;
-          this.profilService.updateProfil(profil);
+          //profil.nom = form.value['nom'];
+          this.profil.nom = form.value['nom'];
+          //profil.description = form.value['description'];
+          this.profil.description = form.value['description'];
+          //profil.droits = droitsProfil;
+          this.profil.droits = droitsProfil;
+          this.profilService.updateProfil(this.profil);
           this.reinitialiserFormulaire();
       }
   }
@@ -107,10 +114,21 @@ export class SectionParametrageProfilComponent implements OnInit {
       this.reinitialiserFormulaire();
   }
 
+  supprimerProfil(profil) {
+    if (confirm("souhaitez-vous supprimer l'utilisateur " + profil.nom)) {
+        this.profilService.deleteProfil(profil);
+        this.reinitialiserFormulaire();
+    }    
+}
+
   reinitialiserFormulaire() {
       this.profil = null;
       this.indicateurProfil = false;
       this.typeModification = '';
+  }
+
+  quitterFormulaire() {
+      this.reinitialiserFormulaire();
   }
 
 }

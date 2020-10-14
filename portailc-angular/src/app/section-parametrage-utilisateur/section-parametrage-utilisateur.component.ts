@@ -27,6 +27,12 @@ export class SectionParametrageUtilisateurComponent implements OnInit {
   indicateurCollaborateur = false;
 
   allCollaborateurs: any[];
+  //utilisateurEdition: any;
+
+  // pour la pagination
+  nbreUtilisateursParPage = 2;
+  nbreUtilisateurs: number;
+  numeroPageEnCours: number;  
 
   constructor(private profilService: ProfilService, private utilisateurService: UtilisateurService) { }
 
@@ -38,18 +44,34 @@ export class SectionParametrageUtilisateurComponent implements OnInit {
       this.profilService.emitAllProfilsSubject();
       this.profilService.getAllProfils();
       this.profilService.emitAllProfilsSubject();
+      /*
       this.allUtilisateursSubscription = this.utilisateurService.allUtilisateursSubject.subscribe(
                         (allUtilisateurs: any) => {
                                               this.allUtilisateurs = allUtilisateurs;
                                                     });
       this.utilisateurService.emitAllUtilisateursSubject();
+      */
+      this.getAllUtilisateurs();
       this.utilisateurService.getAllUtilisateurs();
       this.utilisateurService.emitAllUtilisateursSubject();
-      this.allCollaborateurs = this.utilisateurService.getAllCollaborateurs();
+      this.allCollaborateurs = this.utilisateurService.getAllCollaborateurs();      
+      this.numeroPageEnCours = 1;   
   }
 
-  setTypeModification(typeModification: string) {
-      this.typeModification = typeModification;
+  async getAllUtilisateurs() {
+    let response:any = await this.utilisateurService.getAllUtilisateursPromise();
+    if (response) {
+        this.allUtilisateurs = response;
+        this.utilisateurService.emitAllUtilisateursSubject();
+        this.nbreUtilisateurs = this.allUtilisateurs.length; 
+    }    
+  }
+
+  setTypeModification(typeModification: string, utilisateur?:any) {
+    this.typeModification = typeModification;  
+    if (typeModification != 'create') {
+        this.utilisateur = utilisateur;
+      }      
   }
 
   createUtilisateur(form: NgForm) {
@@ -67,6 +89,8 @@ export class SectionParametrageUtilisateurComponent implements OnInit {
 
       this.utilisateurService.createUtilisateur(utilisateur);
       this.reinitialiserFormulaire();
+      this.nbreUtilisateurs += 1;        
+      this.numeroPageEnCours = 1;
   }
 
   setUtilisateur(utilisateur: any) {
@@ -82,15 +106,8 @@ export class SectionParametrageUtilisateurComponent implements OnInit {
   updateUtilisateurProfil(form: NgForm) {
       console.log(form.value);
       var utilisateur = new Utilisateur;
-      utilisateur = form.value['utilisateur'];
-      //utilisateur.uid = form.value['uid'];
-      //utilisateur.motDePasse = form.value['password'];
-      //utilisateur.nom = form.value['nom'];
-      //utilisateur.prenom = form.value['prenom'];
+      utilisateur = this.utilisateur;
       utilisateur.profil = form.value['profil'];
-      //utilisateur.uoAffectation = form.value['uoAffectation'];
-      //utilisateur.siteExercice = 'test';
-      //utilisateur.fonction = 'test';
 
       this.utilisateurService.updateUtilisateur(utilisateur);
       this.reinitialiserFormulaire();
@@ -98,19 +115,21 @@ export class SectionParametrageUtilisateurComponent implements OnInit {
 
   updateUtilisateurPassword(form: NgForm) {
       console.log(form.value);
-      var utilisateur = new Utilisateur;
-      utilisateur = form.value['utilisateur'];
+      let utilisateur = new Utilisateur;
+      utilisateur = this.utilisateur;
       utilisateur.motDePasse = form.value['password'];
       this.utilisateurService.updateUtilisateur(utilisateur);
       this.reinitialiserFormulaire();
   }
 
 
-  deleteUtilisateur(form: NgForm) {
-      console.log(form.value);
-      const utilisateur = form.value['utilisateur'];
-      this.utilisateurService.deleteUtilisateur(utilisateur);
-      this.reinitialiserFormulaire();
+  supprimerUtilisateur(utilisateur) {
+      if (confirm("souhaitez-vous supprimer l'utilisateur " + utilisateur.prenom + " " + utilisateur.nom + "?")) {
+        console.log(utilisateur);
+        this.utilisateurService.deleteUtilisateur(utilisateur);
+        this.nbreUtilisateurs -= 1;
+        this.numeroPageEnCours = 1;
+      }   
   }
 
   reinitialiserFormulaire() {
@@ -119,6 +138,27 @@ export class SectionParametrageUtilisateurComponent implements OnInit {
       this.collaborateur = null;
       this.indicateurCollaborateur = false;
       this.typeModification = '';
+  }
+
+  quitterFormulaire() {
+      this.reinitialiserFormulaire();
+  }
+
+  afficherPage(numeroPage: number) {
+    this.numeroPageEnCours = numeroPage;
+  }
+
+  afficherPageSuivante() {
+    let nbrePagesMax = this.nbreUtilisateurs / this.nbreUtilisateursParPage;
+    if (this.numeroPageEnCours < nbrePagesMax) {
+        this.numeroPageEnCours += 1;
+    }
+  }
+
+  afficherPagePrecedente() {
+    if (this.numeroPageEnCours > 1) {
+        this.numeroPageEnCours -= 1;
+    }
   }
 
 }

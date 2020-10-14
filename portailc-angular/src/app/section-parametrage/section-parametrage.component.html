@@ -24,6 +24,19 @@
     </li>
   </ul>
 
+  <div class="tab-content" id="myTabContent">
+    <app-section-parametrage-profil
+      *ngIf="typeParametrage === 'profil'">
+    </app-section-parametrage-profil>
+
+    <app-section-parametrage-utilisateur
+      *ngIf="typeParametrage === 'utilisateur'">
+    </app-section-parametrage-utilisateur>
+  </div>
+
+</article>
+
+
 <!--
   <div id="bloc_menu_parametrage">
     <div class="menu_parametrage">
@@ -38,15 +51,3 @@
            (change)="setTypeParametrage('profil')"/>Ajouter, modifier, ou supprimer un profil<br /><br />
   </div>
 -->
-
-  <div class="tab-content" id="myTabContent">
-    <app-section-parametrage-profil
-      *ngIf="typeParametrage === 'profil'">
-    </app-section-parametrage-profil>
-
-    <app-section-parametrage-utilisateur
-      *ngIf="typeParametrage === 'utilisateur'">
-    </app-section-parametrage-utilisateur>
-  </div>
-
-</article>
