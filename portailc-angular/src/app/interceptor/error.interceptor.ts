@@ -13,10 +13,10 @@ export class ErrorInterceptor implements HttpInterceptor {
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         return next.handle(request).pipe(catchError(err => {
             if (err.status === 401) {
+              alert("UID ou mot de passe incorrect");
                 // auto logout if 401 response returned from api
                 this.authenticationService.signOut();
                 location.reload(true);
-                alert("UID ou mot de passe incorrect");
             }
             if (err.status === 500) {
                 console.log("err : " + err.error);

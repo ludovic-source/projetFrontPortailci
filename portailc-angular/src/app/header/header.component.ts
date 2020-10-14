@@ -80,6 +80,7 @@ export class HeaderComponent implements OnInit {
 
   desactiverModeParametrage() {
     this.isModeParametrage = false;
+
     this.router.navigate(['/theme']);
   }
   onAdmin() {

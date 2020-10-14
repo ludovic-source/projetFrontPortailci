@@ -23,7 +23,7 @@
     </ng-template>
   </p-toolbar>
 
-  <p-table #dt [value]="users$ | async" [rows]="10" [paginator]="true"
+  <p-table #dt [value]="users$ | async" [rows]="5" [paginator]="true"
     [globalFilterFields]="['uid','nom','prenom','uoAffectation','siteExercice', 'fonction']"
     [(selection)]="selectedUsers" [rowHover]="true" dataKey="id"
     currentPageReportTemplate="Utilisateurs {first} à {last} sur {totalRecords} " [showCurrentPageReport]="true">
@@ -83,27 +83,6 @@
       </form>
     </div>
     <form [formGroup]="userForm">
-      <!-- <div class="p-field">
-        <label for="nom">Nom : </label>
-        <input type="text" pInputText id="nom" [(ngModel)]="user.nom" required autofocus />
-        <small class="p-invalid" *ngIf="submitted && !user.nom">Nom requis.</small>
-      </div>
-      <div class="p-field">
-        <label for="prenom">Prénom : </label>
-        <input id="prenom" pInputText [(ngModel)]="user.prenom" required />
-      </div>
-      <div class="p-field">
-        <label for="uoAffectation">UO Affectation : </label>
-        <input id="uoAffectation" pInputText [(ngModel)]="user.uoAffectation" required />
-      </div>
-      <div class="p-field">
-        <label for="siteExercie">Site d'Exercice : </label>
-        <input id="siteExercie" pInputText [(ngModel)]="user.siteExercice" required />
-      </div>
-      <div class="p-field">
-        <label for="fonction">Fonction : </label>
-        <input id="fonction" pInputText [(ngModel)]="user.fonction" required />
-      </div> -->
       <input type="hidden"  id="id" formControlName="id"/>
       <div class="form-group">
         <label for="uid">UID : </label>
@@ -117,7 +96,7 @@
       </div>
       <div class="form-group">
         <label for="nom">Prénom : </label>
-        <input type="text" pInputText id="nom" formControlName="prenom" required />
+        <input type="text" pInputText id="prenom" formControlName="prenom" required />
         <small class="p-invalid" *ngIf="submitted && !user.prenom">Prénom requis.</small>
       </div>
       <div class="form-group">

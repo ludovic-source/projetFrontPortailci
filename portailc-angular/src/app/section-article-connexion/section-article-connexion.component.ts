@@ -40,14 +40,7 @@ export class SectionArticleConnexionComponent implements OnInit, OnDestroy {
     console.log('UID = ' + uid);
     console.log('Mot de passe = ' + motDePasse);
     this.authService.login(uid, motDePasse);
-    /*this.authService.signIn(uid, motDePasse).then(
-      () => {
-        this.router.navigate(['home']);
-      },
-      (error) => {
-        this.errorMessage = error;
-      }
-    ); */
+
   }
 
   onSignInForm(form: NgForm) {

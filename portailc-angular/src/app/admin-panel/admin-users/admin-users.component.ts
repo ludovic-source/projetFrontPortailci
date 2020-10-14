@@ -90,10 +90,9 @@ export class AdminUsersComponent implements OnInit {
     this.userForm.controls.siteExercice.setValue(this.user.siteExercice);
     this.userForm.controls.fonction.setValue(this.user.fonction);
     this.userForm.controls.profil.setValue(this.user.profil);
-    console.log(this.userForm.controls.profil.value);
   }
 
-// On force la méthode à attendre le retour de la requête grâce à async / await
+  // On force la méthode à attendre le retour de la requête grâce à async / await
   async searchCollaborateurFromRefo() {
     const uid = this.searchInRefoForm.controls.uid.value;
 
@@ -177,53 +176,25 @@ export class AdminUsersComponent implements OnInit {
     console.log(utilisateurASauvegarder);
 
 
-    try {
-      // Si l'id existe, on procède à une modification
-      if (this.user.id) {
-        this.utilisateurService.updateUtilisateur(utilisateurASauvegarder);
-        this.users$[this.findIndexById(this.user.id)] = this.user;
-        this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Utilisateur mis à jour !', life: 3000 });
-      }
-      // Sinon on crée un nouvel utilisateur
-      else {
-        // On crée le nouvel utilisateur en base, on reçoit un utilisateur avec son id en retour
-        let nouvelUtilisateur = this.utilisateurService.createUtilisateur(utilisateurASauvegarder);
-        // On récupère la valeur de _utilisateursSubject
-        let utilisateurs = this.utilisateurService.getUtilisateursValue();
-        // On y insère le nouvel utilisateur
-        utilisateurs = [...utilisateurs, nouvelUtilisateur];
-        // On met à jour la vue en modifiant _utilisateursSubject
-        this.utilisateurService.setUtilisateursSubject(utilisateurs);
 
-        this.messageService.add({ severity: 'success', summary: 'Succès: ', detail: 'Utilisateur créé !', life: 3000 });
-      }
+    // Si l'id existe, on procède à une modification
+    if (this.user.id) {
 
-      //this.users = [...this.users];
-      // this.userDialog = false;
-      // this.user = new User();
-    } catch(error) {
-      console.log('erreur dans saveUser: ' + error);
-      this.messageService.add({ severity: 'error', summary: 'Erreur: ', detail: error, life: 3000 });
+      this.utilisateurService.updateUtilisateur(utilisateurASauvegarder);
 
-    } finally {
-      this.hideDialog();
-      this.user = {};
     }
+    // Sinon on crée un nouvel utilisateur
+    else {
+      // On crée le nouvel utilisateur en base grâce au service
+      this.utilisateurService.createUtilisateur(utilisateurASauvegarder);
+    }
+    this.hideDialog();
+    this.user = new User();
+
+
   }
 
-  findIndexById(id: number): number {
-    let index = -1;
-    // On récupère la valeur de _utilisateursSubject
-    let utilisateurs = this.utilisateurService.getUtilisateursValue();
-    // On cherche l'index de l'élément dans la collection
-    for (let i = 0; i < utilisateurs.length; i++) {
-      if (utilisateurs[i].id === id) {
-        index = i;
-        break;
-      }
-    }
-    return index;
-  }
+
 
 
 }

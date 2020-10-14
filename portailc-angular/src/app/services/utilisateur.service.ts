@@ -139,13 +139,21 @@ export class UtilisateurService {
       .subscribe(
         (response) => {
           console.log('création utilisateur OK');
-          alert('utilisateur ' + utilisateur.nom + ' créé');
+          //alert('utilisateur ' + utilisateur.nom + ' créé');
+          // On récupère la valeur de _utilisateursSubject
+          let utilisateurs = this.getUtilisateursValue();
+
+          // On y insère le nouvel utilisateur
+          utilisateurs = [...utilisateurs, response];
+
+          // On met à jour la vue en modifiant _utilisateursSubject
+          this.setUtilisateursSubject(utilisateurs);
+          ///////////////////////////////////////
           this.allUtilisateurs.push(response);
           this.emitAllUtilisateursSubject();
           return response;
         },
         (error) => {
-
           alert('utilisateur non créé');
           console.log('Erreur ! : ' + error);
         }
@@ -161,7 +169,11 @@ export class UtilisateurService {
       .subscribe(
         (response) => {
           console.log('mise à jour utilisateur OK');
-          alert('utilisateur ' + utilisateur.nom + ' mis à jour');
+
+          const indexToUpdate = this.findIndexById(response.id);
+          this.getUtilisateursValue()[indexToUpdate] = response;
+
+
           var index = 0;
           for (let utilisateur of this.allUtilisateurs) {
             if (utilisateur.id == response.id) {
@@ -189,7 +201,7 @@ export class UtilisateurService {
       .subscribe(
         (response) => {
           console.log('suppression utilisateur OK');
-          alert('utilisateur ' + utilisateur.nom + ' supprimé');
+          //alert('utilisateur ' + utilisateur.nom + ' supprimé');
 
           let userToRemove = this.getUtilisateursValue().find(user => user.id == utilisateur.id);
           let indexToRemove = this.getUtilisateursValue().indexOf(userToRemove);
@@ -232,6 +244,20 @@ export class UtilisateurService {
           }
         }
       );
+  }
+
+  findIndexById(id: number): number {
+    let index = -1;
+    // On récupère la valeur de _utilisateursSubject
+    let utilisateurs = this.getUtilisateursValue();
+    // On cherche l'index de l'élément dans la collection
+    for (let i = 0; i < utilisateurs.length; i++) {
+      if (utilisateurs[i].id === id) {
+        index = i;
+        break;
+      }
+    }
+    return index;
   }
 
   mapToUtilisateur(user: User): Utilisateur {
