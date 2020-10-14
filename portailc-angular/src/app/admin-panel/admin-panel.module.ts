@@ -13,13 +13,15 @@ import { InputTextModule } from 'primeng/inputtext';
 import { AdminUsersComponent } from './admin-users/admin-users.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DropdownModule } from 'primeng/dropdown';
+import { AdminProfilesComponent } from './admin-profiles/admin-profiles.component';
 
 
 
 @NgModule({
   declarations: [
     AdminPanelComponent,
-    AdminUsersComponent
+    AdminUsersComponent,
+    AdminProfilesComponent
   ],
   imports: [
     CommonModule,
