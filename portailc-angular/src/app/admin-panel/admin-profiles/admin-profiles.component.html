@@ -98,6 +98,12 @@
         <small class="p-invalid" *ngIf="submitted && !profil.description">Description requise.</small>
       </div>
 
+      <div class="input-group" *ngFor="let droit of droits$ | async">
+        <span class="input-group-addon">
+          <input type="checkbox" [value]="droit" aria-label="..." formControlName="{{ droit.nom }}" id="{{ droit.nom }}" >
+        </span>
+        <label type="text" class="form-control" for="{{ droit.nom }}" aria-label="...">{{ droit.nom }}</label>
+      </div>
     </form>
   </ng-template>
 

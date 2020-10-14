@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Observable } from 'rxjs';
 import { Droit } from 'src/app/models/Droit';
@@ -44,7 +44,7 @@ export class AdminProfilesComponent implements OnInit {
     private droitService: DroitService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
-    private formBuilder: FormBuilder) {  }
+    private formBuilder: FormBuilder) { }
 
   ngOnInit(): void {
     this.profilService.getAllProfils();
@@ -58,12 +58,19 @@ export class AdminProfilesComponent implements OnInit {
 
   initForm() {
 
+
     // Initialisation du formulaire utilisateur
     this.profileForm = this.formBuilder.group({
       id: [this.profil.id],
       nom: [this.profil.nom, Validators.required, , Validators.pattern(/[0-9a-zA-Z]/)],
-      description: [this.profil.description, Validators.required, , Validators.pattern(/[0-9a-zA-Z]/)],
+      description: [this.profil.description, Validators.required, , Validators.pattern(/[0-9a-zA-Z]/)]
+    });
+    this.addDroitsControlsInForm();
+  }
 
+  addDroitsControlsInForm() {
+    (this.droitService.getDroitssValue()).forEach((droit: Droit) => {
+      this.profileForm.addControl(droit.nom, new FormControl(false));
     });
   }
 
@@ -74,14 +81,14 @@ export class AdminProfilesComponent implements OnInit {
 
   }
 
-    // Fenêtre modale
-    openNew() {
+  // Fenêtre modale
+  openNew() {
 
-      this.profil = new Profil();
-      this.updateUserFormValues();
-      this.submitted = false;
-      this.profileDialog = true;
-    }
+    this.profil = new Profil();
+    this.updateUserFormValues();
+    this.submitted = false;
+    this.profileDialog = true;
+  }
 
   hideDialog() {
     this.profileDialog = false;
@@ -105,6 +112,6 @@ export class AdminProfilesComponent implements OnInit {
   }
 
   saveProfile() {
-
+    console.log(this.profileForm.value);
   }
 }
