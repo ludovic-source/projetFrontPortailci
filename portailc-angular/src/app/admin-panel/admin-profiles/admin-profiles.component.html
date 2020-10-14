@@ -52,24 +52,34 @@
         <td>{{profil.nom}}</td>
         <td>{{profil.description}}</td>
         <td>
-          Consultation
+          <div>
+            <i class="fas fa-check"></i>
+          </div>
         </td>
         <td>
-          Création
+          <div>
+            <i class="fas fa-check"></i>
+          </div>
         </td>
         <td>
-          Modification
+          <div>
+            <i class="fas fa-check"></i>
+          </div>
         </td>
         <td>
-          Suppression
+          <div>
+            <i class="fas fa-check"></i>
+          </div>
         </td>
         <td>
-          Administration
+          <div>
+            <i class="fas fa-check"></i>
+          </div>
         </td>
         <td>
           <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2"
             ></button>
-          <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
+          <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
           (click)="deleteProfile(profil)"></button>
         </td>
       </tr>
