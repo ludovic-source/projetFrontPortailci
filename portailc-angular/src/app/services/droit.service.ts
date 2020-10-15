@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Subject } from 'rxjs/Subject';
 import { Droit } from '../models/Droit';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class DroitService {
@@ -15,25 +16,17 @@ export class DroitService {
   // profils$ est un Observable et peut être consommé par nos Components
   readonly droits$: Observable<Droit[]> =  this._droitsSubject.asObservable();
 
-
-    allDroitsSubject = new Subject<any[]>();
-    private allDroits: any[];
-
-    private url = 'http://localhost:9095/portailci/droits/';
+    private url = environment.API_URL + '/droits/';
 
     constructor(private httpClient: HttpClient) {
     }
 
-    getDroitssValue() {
+    getDroitssValue(): Droit[] {
       return this._droitsSubject.getValue();
     }
 
     setDroitsSubject(data) {
       this._droitsSubject.next(data);
-    }
-
-    emitAllDroitsSubject() {
-       this.allDroitsSubject.next(this.allDroits);
     }
 
     getAllDroits() {
@@ -44,11 +37,8 @@ export class DroitService {
               .get<any[]>(this.url + 'get', options)
               .subscribe(
                 (response) => {
-                  this._droitsSubject.next(response);
-                  console.log(this.getDroitssValue());
-                  this.allDroits = response;
+                  this.setDroitsSubject(response);
                   console.log('récupération de tous les droits OK');
-                  this.emitAllDroitsSubject();
                 },
                 (error) => {
                   console.log('Erreur ! : ' + error);

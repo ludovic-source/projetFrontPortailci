@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Subject } from 'rxjs/Subject';
 import { Lien } from '../models/Lien';
+import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class LienService {
@@ -15,7 +16,7 @@ export class LienService {
   liensSubject = new Subject<any[]>();
   private liens: any[];
 
-  private url = 'http://localhost:9095/portailci/lien/';
+  private url = environment.API_URL + '/lien/';
 
   constructor(private httpClient: HttpClient) {
   }

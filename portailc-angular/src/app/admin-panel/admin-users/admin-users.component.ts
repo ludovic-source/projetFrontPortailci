@@ -121,17 +121,11 @@ export class AdminUsersComponent implements OnInit {
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        try {
+
           this.selectedUsers.forEach(user => {
-            //this.user = user;
             this.utilisateurService.deleteUtilisateur(this.utilisateurService.mapToUtilisateur(user));
           });
-          this.messageService.add({ severity: 'success', summary: 'Succès: ', detail: 'Utilisateurs supprimés !', life: 3000 });
-        } catch (error) {
-          this.messageService.add({ severity: 'error', summary: 'Erreur: ', detail: error, life: 3000 });
-        } finally {
           this.selectedUsers = null;
-        }
       }
     });
   }
@@ -150,14 +144,9 @@ export class AdminUsersComponent implements OnInit {
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        try {
-          this.utilisateurService.deleteUtilisateur(user);
-          //this.users$ = this.users$.filter(val => val.id !== user.id);
-          //this.user = ;
-          this.messageService.add({ severity: 'success', summary: 'Succès: ', detail: 'Utilisateur supprimé !', life: 3000 });
-        } catch (error) {
-          this.messageService.add({ severity: 'error', summary: 'Erreur: ', detail: error, life: 3000 });
-        }
+
+        this.utilisateurService.deleteUtilisateur(user);
+
       }
     });
   }

@@ -104,29 +104,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   getImage(idTheme: number) {
-    return window.localStorage.getItem('' + idTheme);  // pour récupérer la vraie image du back-end
-    // ci-dessous, juste pour les tests en attendant la mise en place du getImage()
-    /*
-          if (idTheme == 1) {
-              return 'icons8_f1_car_24px.png';
-          }
-          if (idTheme == 2) {
-              return 'icons8_golf_cart_24px.png';
-          }
-          if (idTheme == 3) {
-              return 'icons8_people_in_car_side_view_24px.png';
-          }
-          if (idTheme == 4) {
-              return 'icons8_food_truck_24px.png';
-          }
-          if (idTheme == 5) {
-              return 'icons8_tractor_24px.png';
-          }
-          if (idTheme == 36) {
-              return 'icons8_rocket_24px.png';
-          }
-          return '';
-    */
+    return window.localStorage.getItem('' + idTheme);
   }
 
 }

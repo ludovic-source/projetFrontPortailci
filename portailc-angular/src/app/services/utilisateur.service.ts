@@ -21,50 +21,6 @@ export class UtilisateurService {
   readonly collaborateur$: Observable<User> = this._collaborateurSubject.asObservable();
   readonly utilisateurs$: Observable<User[]> = this._utilisateursSubject.asObservable();
 
-
-  allUtilisateursSubject = new Subject<any[]>();
-  private allUtilisateurs: any[];
-
-
-  // A supprimer une fois l'implémentation opérationnelle
-  private collaborateursBDDF = [
-    {
-      uid: '100100',
-      nom: 'Harden',
-      prenom: 'James',
-      uoAffectation: 'Houston Rockets'
-    },
-    {
-      uid: 'A00100',
-      nom: 'James',
-      prenom: 'Lebron',
-      uoAffectation: 'Los Angeles Lakers'
-    },
-    {
-      uid: 'B00100',
-      nom: 'Antetokoumpo',
-      prenom: 'Gianis',
-      uoAffectation: 'Milwaukee Bucks'
-    },
-    {
-      uid: 'C00100',
-      nom: 'Durant',
-      prenom: 'Kevin',
-      UOAffectation: 'Brooklyn Nets'
-    },
-    {
-      uid: 'D00100',
-      nom: 'Williamson',
-      prenom: 'Zion',
-      uoAffectation: 'New Orleans Pelicans'
-    },
-    {
-      uid: 'E00100',
-      nom: 'Davis',
-      prenom: 'Antony',
-      uoAffectation: 'Los Angeles Lakers'
-    }];
-
   private url = environment.API_URL + '/utilisateurs';
 
   constructor(private httpClient: HttpClient) {
@@ -82,14 +38,6 @@ export class UtilisateurService {
   }
   setUtilisateursSubject(data) {
     this._utilisateursSubject.next(data);
-  }
-
-  emitAllUtilisateursSubject() {
-    this.allUtilisateursSubject.next(this.allUtilisateurs);
-  }
-
-  getAllCollaborateurs(): any[] {
-    return this.collaborateursBDDF;
   }
 
   getCollaborateurRefoByUid(uid: string): any {
@@ -115,13 +63,7 @@ export class UtilisateurService {
       .get<any>(this.url + '/get', options)
       .subscribe(
         (response) => {
-          this.allUtilisateurs = response;
-          console.log('récupération de tous les utilisateurs OK');
-          this.emitAllUtilisateursSubject();
-
-          //
-          //console.log(response);
-          this._utilisateursSubject.next(response);
+          this.setUtilisateursSubject(response);
         },
         (error) => {
           console.log('Erreur ! : ' + error);
@@ -130,7 +72,7 @@ export class UtilisateurService {
   }
 
   createUtilisateur(utilisateur: Utilisateur): any {
-    console.log('uid : ' + utilisateur.uid);
+
     let options = {
       withCredentials: true
     };
@@ -139,7 +81,8 @@ export class UtilisateurService {
       .subscribe(
         (response) => {
           console.log('création utilisateur OK');
-          //alert('utilisateur ' + utilisateur.nom + ' créé');
+          alert('Utilisateur ' + response.nom + ' créé');
+
           // On récupère la valeur de _utilisateursSubject
           let utilisateurs = this.getUtilisateursValue();
 
@@ -148,9 +91,7 @@ export class UtilisateurService {
 
           // On met à jour la vue en modifiant _utilisateursSubject
           this.setUtilisateursSubject(utilisateurs);
-          ///////////////////////////////////////
-          this.allUtilisateurs.push(response);
-          this.emitAllUtilisateursSubject();
+
           return response;
         },
         (error) => {
@@ -170,18 +111,15 @@ export class UtilisateurService {
         (response) => {
           console.log('mise à jour utilisateur OK');
 
-          const indexToUpdate = this.findIndexById(response.id);
-          this.getUtilisateursValue()[indexToUpdate] = response;
-
-
+          let utilisateursAModifier = this.getUtilisateursValue();
           var index = 0;
-          for (let utilisateur of this.allUtilisateurs) {
+          for (let utilisateur of utilisateursAModifier) {
             if (utilisateur.id == response.id) {
-              this.allUtilisateurs[index] = response;
+              utilisateursAModifier[index] = response;
             }
             index = index + 1;
           }
-          this.emitAllUtilisateursSubject();
+          this.setUtilisateursSubject(utilisateursAModifier);
           return response;
         },
         (error) => {
@@ -201,7 +139,7 @@ export class UtilisateurService {
       .subscribe(
         (response) => {
           console.log('suppression utilisateur OK');
-          //alert('utilisateur ' + utilisateur.nom + ' supprimé');
+          alert('utilisateur ' + utilisateur.nom + ' supprimé');
 
           let userToRemove = this.getUtilisateursValue().find(user => user.id == utilisateur.id);
           let indexToRemove = this.getUtilisateursValue().indexOf(userToRemove);
@@ -211,32 +149,19 @@ export class UtilisateurService {
           // On met à jour la vue
           this._utilisateursSubject.next(this.getUtilisateursValue());
 
-          var index = 0;
-          var indexRecherche: number;
-
-          for (let utilisateurCourant of this.allUtilisateurs) {
-            if (utilisateurCourant.id == utilisateur.id) {
-              indexRecherche = index;
-            }
-            index = index + 1;
-          }
-          this.allUtilisateurs.splice(indexRecherche, 1);
-          this.emitAllUtilisateursSubject();
         },
         (error) => {
           if (error == 'OK') {
             console.log('suppression utilisateur OK');
             alert('utilisateur ' + utilisateur.nom + ' supprimé');
-            var index = 0;
-            var indexRecherche: number;
-            for (let utilisateurCourant of this.allUtilisateurs) {
-              if (utilisateurCourant.id == utilisateur.id) {
-                indexRecherche = index;
-              }
-              index = index + 1;
-            }
-            this.allUtilisateurs.splice(indexRecherche, 1);
-            this.emitAllUtilisateursSubject();
+
+            let userToRemove = this.getUtilisateursValue().find(user => user.id == utilisateur.id);
+            let indexToRemove = this.getUtilisateursValue().indexOf(userToRemove);
+
+            // On supprime l'élément du tableau
+            this.getUtilisateursValue().splice(indexToRemove, 1);
+            // On met à jour la vue
+            this._utilisateursSubject.next(this.getUtilisateursValue());
           } else {
             alert('utilisateur non supprimé');
             console.log('Erreur ! : ' + error);

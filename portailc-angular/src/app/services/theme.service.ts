@@ -4,6 +4,7 @@ import { Subject } from 'rxjs/Subject';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Thematique } from '../models/Thematique';
 import { switchMap, map, tap } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class ThemeService {
@@ -22,7 +23,7 @@ export class ThemeService {
   themesNiveau3Subject = new Subject<any[]>();
   private themesNiveau3: any[];
 
-  private url = 'http://localhost:9095/portailci/thematique/';
+  private url = environment.API_URL + '/thematique/';
 
   /*
   themesTest = [

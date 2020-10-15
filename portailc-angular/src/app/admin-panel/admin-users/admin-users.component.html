@@ -1,5 +1,3 @@
-<p-toast></p-toast>
-
 <div class="card">
   <p-toolbar styleClass="p-mb-4">
     <ng-template pTemplate="left">
@@ -78,8 +76,10 @@
   <ng-template pTemplate="content">
     <div *ngIf="!user.id" class="p-field">
       <form (ngSubmit)="searchCollaborateurFromRefo()" [formGroup]="searchInRefoForm">
-        <input type="text" formControlName="uid">
-        <button type="submit">Rechercher Collaborateur</button>
+        <div class="form-group">
+          <input type="text" pInputText class="p-button-success" formControlName="uid">
+          <button pButton type="submit" label="Rechercher collaborateur dans le REFOG par son UID" icon="pi pi-search-plus"  class="p-button-success"></button>
+        </div>
       </form>
     </div>
     <form [formGroup]="userForm">
@@ -116,9 +116,16 @@
       </div>
       <div class="form-group">
         <label for="fonction">Profil : </label>
-        <select class="form-control" formControlName="profil">
+        <!-- Pour une création -->
+        <select class="form-control" formControlName="profil" *ngIf="!user.id">
           <ng-container *ngFor="let profil of profils$ | async">
-            <option [selected]="user.profil ? profil.id == user.profil.id : profil.nom == 'Utilisateur'" [ngValue]="profil">{{ profil.nom }}</option>
+            <option [selected]="(profil.nom == 'Utilisateur')" [ngValue]="profil">{{ profil.nom }}</option>
+          </ng-container>
+        </select>
+        <!-- Pour une modification -->
+        <select class="form-control" formControlName="profil" *ngIf="user.id">
+          <ng-container *ngFor="let profil of profils$ | async">
+            <option [selected]="(user.profil === profil)" [ngValue]="profil">{{ profil.nom }}</option>
           </ng-container>
         </select>
       </div>

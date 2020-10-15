@@ -5,10 +5,10 @@
     <ng-template pTemplate="left">
       <div class="p-mr-2">
         <button pButton pRipple label="Ajouter" icon="pi pi-plus" class="p-button-success p-m-2"
-        (click)="openNew()"></button>
+          (click)="openNew()"></button>
       </div>
       <button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger p-m-2"
-         [disabled]="!selectedProfiles || !selectedProfiles.length"></button>
+        [disabled]="!selectedProfiles || !selectedProfiles.length" (click)="deleteSelectedProfiles()"></button>
     </ng-template>
 
     <ng-template pTemplate="right">
@@ -35,7 +35,7 @@
         </th>
         <th pSortableColumn="nom">Nom <p-sortIcon field="nom"></p-sortIcon>
         </th>
-        <th >Description</th>
+        <th>Description</th>
         <th>Consultation</th>
         <th>Création</th>
         <th>Modification</th>
@@ -44,8 +44,8 @@
         <th></th>
       </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-profil>
-      <tr>
+    <ng-template pTemplate="body" let-profil >
+      <tr >
         <td>
           <p-tableCheckbox [value]="profil"></p-tableCheckbox>
         </td>
@@ -53,7 +53,7 @@
         <td>{{profil.description}}</td>
         <td>
           <div>
-            <i class="fas fa-check"></i>
+            <i class="fas fa-check" ></i>
           </div>
         </td>
         <td>
@@ -68,19 +68,19 @@
         </td>
         <td>
           <div>
-            <i class="fas fa-check"></i>
+            <i class="fas fa-check" ></i>
           </div>
         </td>
         <td>
           <div>
-            <i class="fas fa-check"></i>
+            <i class="fas fa-check" *ngIf="isDroitInThisProfil('Administration', profil)"></i>
           </div>
         </td>
         <td>
           <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2"
-            ></button>
+            (click)="editProfile(profil)"></button>
           <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
-          (click)="deleteProfile(profil)"></button>
+            (click)="deleteProfile(profil)"></button>
         </td>
       </tr>
     </ng-template>
@@ -95,7 +95,7 @@
   <ng-template pTemplate="content">
 
     <form [formGroup]="profileForm">
-      <input type="hidden"  id="id" formControlName="id"/>
+      <input type="hidden" id="id" formControlName="id" />
 
       <div class="form-group">
         <label for="nom">Nom : </label>
@@ -110,7 +110,8 @@
 
       <div class="input-group" *ngFor="let droit of droits$ | async">
         <span class="input-group-addon">
-          <input type="checkbox" [value]="droit" aria-label="..." formControlName="{{ droit.nom }}" id="{{ droit.nom }}" >
+          <input type="checkbox" [value]="droit" aria-label="..." formControlName="{{ droit.nom }}"
+            id="{{ droit.nom }}">
         </span>
         <label type="text" class="form-control" for="{{ droit.nom }}" aria-label="...">{{ droit.nom }}</label>
       </div>

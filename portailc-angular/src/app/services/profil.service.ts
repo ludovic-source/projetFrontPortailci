@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Subject } from 'rxjs/Subject';
 import { Profil } from '../models/Profil';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class ProfilService {
@@ -13,13 +14,9 @@ export class ProfilService {
 
 
   // profils$ est un Observable et peut être consommé par nos Components
-  readonly profils$: Observable<Profil[]> =  this._profilsSubject.asObservable();
+  readonly profils$: Observable<Profil[]> = this._profilsSubject.asObservable();
 
-
-  allProfilsSubject = new Subject<any[]>();
-  private allProfils: any[];
-
-  private url = 'http://localhost:9095/portailci/profils/';
+  private url = environment.API_URL + '/profils/';
 
   constructor(private httpClient: HttpClient) {
   }
@@ -32,10 +29,6 @@ export class ProfilService {
     this._profilsSubject.next(data);
   }
 
-  emitAllProfilsSubject() {
-    this.allProfilsSubject.next(this.allProfils);
-  }
-
   getAllProfils() {
     let options = {
       withCredentials: true
@@ -45,12 +38,7 @@ export class ProfilService {
       .subscribe(
         (response) => {
           // On stocke les profils dans le Subject
-          this._profilsSubject.next(response);
-          console.log(this.getProfilsValue());
-          this.allProfils = response;
-          console.log('récupération de tous les profils OK');
-          console.log(response);
-          this.emitAllProfilsSubject();
+          this.setProfilsSubject(response);
         },
         (error) => {
           console.log('Erreur ! : ' + error);
@@ -68,8 +56,10 @@ export class ProfilService {
         (response) => {
           console.log('création profil OK');
           alert('profil ' + response.nom + ' créé');
-          this.allProfils.push(response);
-          this.emitAllProfilsSubject();
+          let profils = this.getProfilsValue();
+          profils = [...this.getProfilsValue(), response];
+          this.setProfilsSubject(profils);
+
           return response;
         },
         (error) => {
@@ -89,14 +79,15 @@ export class ProfilService {
         (response) => {
           console.log('mise à jour profil OK');
           alert('profil ' + response.nom + ' mis à jour');
+          let profilsAModifier = this.getProfilsValue();
           var index = 0;
-          for (let profil of this.allProfils) {
+          for (let profil of this.getProfilsValue()) {
             if (profil.id == response.id) {
-              this.allProfils[index] = response;
+              profilsAModifier[index] = response;
             }
             index = index + 1;
           }
-          this.emitAllProfilsSubject();
+          this.setProfilsSubject(profilsAModifier);
           return response;
         },
         (error) => {
@@ -117,14 +108,16 @@ export class ProfilService {
           console.log('suppression profil OK');
           var index = 0;
           var indexRecherche: number;
-          for (let profilCourant of this.allProfils) {
+          let profilsAModifier = this.getProfilsValue();
+
+          for (let profilCourant of profilsAModifier) {
             if (profilCourant.id == profil.id) {
               indexRecherche = index;
             }
             index = index + 1;
           }
-          this.allProfils.splice(indexRecherche, 1);
-          this.emitAllProfilsSubject();
+          profilsAModifier.splice(indexRecherche, 1);
+          this.setProfilsSubject(profilsAModifier);
         },
         (error) => {
           if (error == 'OK') {
@@ -132,14 +125,16 @@ export class ProfilService {
             alert('profil ' + profil.nom + ' supprimé');
             var index = 0;
             var indexRecherche: number;
-            for (let profilCourant of this.allProfils) {
+            let profilsAModifier = this.getProfilsValue();
+
+            for (let profilCourant of profilsAModifier) {
               if (profilCourant.id == profil.id) {
                 indexRecherche = index;
               }
               index = index + 1;
             }
-            this.allProfils.splice(indexRecherche, 1);
-            this.emitAllProfilsSubject();
+            profilsAModifier.splice(indexRecherche, 1);
+            this.setProfilsSubject(profilsAModifier);
           } else {
             alert('profil non supprimé');
             console.log('Erreur ! : ' + error);

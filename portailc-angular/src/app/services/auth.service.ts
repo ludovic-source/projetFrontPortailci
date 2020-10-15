@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { ThemeService } from '../services/theme.service';
 import { Subscription } from 'rxjs/Subscription';
+import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class AuthService {
@@ -38,7 +39,7 @@ export class AuthService {
     let body = new URLSearchParams();
     body.set('username', username);
     body.set('password', password);
-    let url = 'http://localhost:9095/login';
+    let url = environment.DOMAIN_URL + '/login';
     let options = {
       headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'),
       withCredentials: true
@@ -61,7 +62,7 @@ export class AuthService {
   logout() {
     let body = new URLSearchParams();
     body.set('username', sessionStorage.getItem('username'));
-    let url = 'http://localhost:9095/logout';
+    let url = environment.DOMAIN_URL + '/logout';
     let options = {
       headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'),
       withCredentials: true
@@ -78,7 +79,7 @@ export class AuthService {
       withCredentials: true
     };
     this.httpClient
-      .get<any>('http://localhost:9095/portailci/profils/get/connectedUser', options)
+      .get<any>(environment.API_URL + '/profils/get/connectedUser', options)
       .subscribe(
         (response) => {
           console.log('profil : ' + response.nom);

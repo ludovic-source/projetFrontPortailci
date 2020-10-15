@@ -24,9 +24,6 @@ import { SectionThemeArbreComponent } from './section-theme-arbre/section-theme-
 import { SectionThemeEditionComponent } from './section-theme-edition/section-theme-edition.component';
 import { SectionThemeEditionThematiqueComponent } from './section-theme-edition-thematique/section-theme-edition-thematique.component';
 import { SectionThemeEditionLienComponent } from './section-theme-edition-lien/section-theme-edition-lien.component';
-import { SectionParametrageComponent } from './section-parametrage/section-parametrage.component';
-import { SectionParametrageProfilComponent } from './section-parametrage-profil/section-parametrage-profil.component';
-import { SectionParametrageUtilisateurComponent } from './section-parametrage-utilisateur/section-parametrage-utilisateur.component';
 import { HeaderComponent } from './header/header.component';
 import { PrimeNgModule } from './shared/prime-ng/prime-ng.module';
 import { AdminGuard } from './services/admin.guard';
@@ -44,10 +41,6 @@ const appRoutes: Routes = [
     loadChildren: () => import('./menu-arborescent-container/menu-arborescent-container.module')
                         .then(module => module.MenuArborescentContainerModule)
   },
-  // { path: 'theme', canActivate: [AuthGuard], component: SectionComponent },
-  // { path: 'theme/:id', canActivate: [AuthGuard], component: SectionComponent },
-  // { path: 'edition', canActivate: [AuthGuard], component: SectionThemeEditionComponent },
-  { path: 'parametrage', canActivate: [AuthGuard], component: SectionParametrageComponent },
   { path: 'connexion', component: SectionArticleConnexionComponent },
   { path: '', redirectTo: 'connexion', pathMatch: 'full'},
   { path: '**', redirectTo: 'connexion'}
@@ -62,9 +55,6 @@ const appRoutes: Routes = [
     SectionThemeEditionComponent,
     SectionThemeEditionThematiqueComponent,
     SectionThemeEditionLienComponent,
-    SectionParametrageComponent,
-    SectionParametrageProfilComponent,
-    SectionParametrageUtilisateurComponent,
     HeaderComponent
   ],
   imports: [
