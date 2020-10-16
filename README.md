@@ -5,6 +5,10 @@ Cette application a été conçue sur Angular 9
 
 Elle fonctionne avec l'API Portail CI (à retrouver sur le repo GitHub: https://github.com/BertrandTavignot/PortailCI ) conçue en Java Spring Boot.
 
-Deux version de l'application front sont visibles: la version portant le tag "v1.0" correspondant à la version finale et
-la dernière version de la branche Master de la version initiale V0 correspond à celle du commit du 14/10 qui a pour identifiant 415de50.
-Pour utiliser cette version, il faut generer un projet Angular portailci-angular, et ajouter le dossier rxjs-compat dans le dossier node_modules, et importer Bootstrap.
+Trois versions de l'application front sont visibles :
+    - la version initiale de base, portant le tag V0.1 sur la branche Master. Cette version a été développée avant le début de la formation Angular pour anticiper les problèmes et avoir une meilleure vision de l'application cible. 
+              Pré requis : ajouter le dossier rxjs-compat dans le dossier node_modules.
+    - la version portant l'identifiant 415de50 (commit du 14/10) sur la branche Master qui correspond à une version améliorée de V0.1 intégrant certains concepts vus pendant la formation, notamment Bootstrap pour une mise en forme améliorée.
+              Pré requis : ajouter le dossier rxjs-compat dans le dossier node_modules, et importer Bootstrap.
+    - la version CIBLE portant le tag "v1.0" correspondant à la version finale sur la branche Dev. C'est cette version qui est présentée pour l'évaluation finale.
+              Pré requis : ajouter le dossier rxjs-compat dans le dossier node_modules, importer Bootstrap, et primeNg.
